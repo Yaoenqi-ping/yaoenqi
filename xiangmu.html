@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>网易云音乐 · 播客页面</title>
+    <style>
+      :root {
+        --bg: #f6f7fb;
+        --panel: rgba(255, 255, 255, 0.8);
+        --line: #e8ebf1;
+        --line-soft: #f0f2f7;
+        --text: #2f3136;
+        --muted: #949cab;
+        --muted-strong: #7c8293;
+        --red: #d93f4b;
+        --red-soft: #f8e9eb;
+        --shadow: 0 12px 24px rgba(37, 47, 65, 0.08);
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body {
+        margin: 0;
+        min-width: 1280px;
+        min-height: 100vh;
+        font-family: Arial, "Microsoft YaHei", "PingFang SC", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      a { color: inherit; text-decoration: none; }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: stretch;
+      }
+
+      .app {
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        background: linear-gradient(180deg, #f7f8fc 0%, #f2f3f8 100%);
+      }
+
+      .sidebar {
+        width: 200px;
+        background: rgba(255,255,255,0.52);
+        border-right: 1px solid var(--line);
+        padding: 18px 12px 18px 14px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        height: 40px;
+        padding: 0 8px 12px;
+        font-weight: 700;
+        font-size: 14px;
+        color: #3c3f44;
+      }
+
+      .brand-mark {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, #fff 0 10%, #f2d0d5 11%, #d73a45 40%, #ad1c2c 100%);
+        border: 2px solid #cf404d;
+        position: relative;
+      }
+
+      .brand-mark::before {
+        content: "";
+        position: absolute;
+        inset: 4px 6px 4px 6px;
+        border-radius: 50%;
+        border: 2px solid rgba(255,255,255,0.8); 
+      }
+
+      .menu {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .menu-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        height: 32px;
+        padding: 0 12px;
+        border-radius: 9px;
+        color: #596175;
+        font-size: 14px;
+      }
+
+      .menu-item.active {
+        background: linear-gradient(90deg, #f7edf1, #f4f5fb);
+        color: var(--red);
+        font-weight: 700;
+      }
+
+      .menu-icon {
+        width: 14px;
+        height: 14px;
+        border-radius: 4px;
+        background: #eef1f5;
+        position: relative;
+      }
+
+      .menu-item.active .menu-icon {
+        background: linear-gradient(135deg, #e56d76, #d93f4b);
+        box-shadow: inset 0 0 0 3px rgba(255,255,255,0.7);
+      }
+
+      .section-group {
+        margin-top: 18px;
+        padding-top: 12px;
+        border-top: 1px solid var(--line);
+      }
+
+      .group-title {
+        font-size: 12px;
+        color: #a0a8b8;
+        letter-spacing: 0.08em;
+        padding: 0 12px 8px;
+        text-transform: uppercase;
+      }
+
+      .mini-list {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .mini-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 10px;
+        border-radius: 10px;
+        color: #4d535b;
+      }
+
+      .mini-avatar {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #f0dfe8, #dfe3f6);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .mini-avatar::before {
+        content: "";
+        position: absolute;
+        left: 8px;
+        top: 5px;
+        width: 12px;
+        height: 10px;
+        border-radius: 10px 10px 7px 7px;
+        background: rgba(255,255,255,0.8);
+      }
+
+      .mini-avatar::after {
+        content: "";
+        position: absolute;
+        left: 6px;
+        bottom: 3px;
+        width: 16px;
+        height: 10px;
+        border-radius: 12px 12px 0 0;
+        background: rgba(255,255,255,0.7);
+      }
+
+      .mini-label {
+        font-size: 12px;
+      }
+
+      .sidebar-footer {
+        margin-top: auto;
+        padding-top: 16px;
+        border-top: 1px solid var(--line);
+      }
+
+      .user-badge {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 4px 8px 0;
+      }
+
+      .user-head {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #f6d0d8, #d3d9f5);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .user-head::before {
+        content: "";
+        position: absolute;
+        left: 10px;
+        top: 7px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.9);
+      }
+
+      .user-head::after {
+        content: "";
+        position: absolute;
+        left: 7px;
+        bottom: 4px;
+        width: 18px;
+        height: 12px;
+        border-radius: 16px 16px 7px 7px;
+        background: rgba(255,255,255,0.8);
+      }
+
+      .user-meta {
+        line-height: 1.3;
+      }
+
+      .user-name {
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .user-desc {
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .content {
+        flex: 1;
+        padding: 18px 20px 110px 20px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+      }
+
+      .search-box {
+        max-width: 600px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        height: 38px;
+        padding: 0 14px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: rgba(255,255,255,0.7);
+        color: var(--muted);
+      }
+
+      .search-icon {
+        width: 12px;
+        height: 12px;
+        border: 2px solid #a6adbb;
+        border-radius: 50%;
+        position: relative;
+      }
+
+      .search-icon::after {
+        content: "";
+        position: absolute;
+        width: 6px;
+        height: 2px;
+        background: #a6adbb;
+        right: -4px;
+        bottom: -1px;
+        transform: rotate(45deg);
+        border-radius: 2px;
+      }
+
+      .search-text {
+        font-size: 13px;
+        color: #b3bac6;
+        white-space: nowrap;
+      }
+
+      .toolbar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .user-pill {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px 6px 6px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: rgba(255,255,255,0.7);
+        font-size: 12px;
+      }
+
+      .user-pill .dot {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #f8d7cb, #d8d9f1);
+        position: relative;
+      }
+
+      .user-pill .dot::before {
+        content: "";
+        position: absolute;
+        left: 6px;
+        top: 5px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.9);
+      }
+
+      .user-pill .dot::after {
+        content: "";
+        position: absolute;
+        left: 4px;
+        bottom: 3px;
+        width: 14px;
+        height: 8px;
+        border-radius: 10px 10px 6px 6px;
+        background: rgba(255,255,255,0.8);
+      }
+
+      .tool-btn {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 1px solid var(--line);
+        background: rgba(255,255,255,0.7);
+        position: relative;
+      }
+
+      .tool-btn::before {
+        content: "";
+        position: absolute;
+        inset: 4px;
+        border-radius: 50%;
+        background: #b7bdc9;
+      }
+
+      .tag-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 16px;
+      }
+
+      .chip {
+        font-size: 12px;
+        color: var(--muted-strong);
+        background: transparent;
+        border: none;
+        padding: 5px 0;
+      }
+
+      .chip.active {
+        color: var(--red);
+        font-weight: 700;
+      }
+
+      .main-box {
+        margin-top: 22px;
+      }
+
+      .panel-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+      }
+
+      .panel-title h3 {
+        margin: 0;
+        font-size: 18px;
+      }
+
+      .panel-title .arrow {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        border: 1px solid var(--line);
+        background: rgba(255,255,255,0.7);
+        position: relative;
+      }
+
+      .panel-title .arrow::before,
+      .panel-title .arrow::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 8px;
+        height: 1.6px;
+        background: #7d889a;
+        transform: translate(-50%, -50%);
+      }
+
+      .panel-title .arrow::after {
+        transform: translate(-50%, -50%) rotate(90deg);
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(180px, 1fr));
+        gap: 16px;
+      }
+
+      .album-card {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .album-cover {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+      }
+
+      .album-cover img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .album-cover .count {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 3px 6px;
+        border-radius: 10px;
+        background: rgba(18,22,29,0.3);
+        color: #fff;
+        font-size: 10px;
+      }
+
+      .album-cover .count::before {
+        content: "▶";
+        font-size: 8px;
+      }
+
+      .album-name {
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.5;
+        color: #31363d;
+      }
+
+      .album-desc {
+        font-size: 11px;
+        color: #8a92a1;
+        line-height: 1.5;
+      }
+
+      .podcast-layout {
+        display: grid;
+        grid-template-columns: 1.05fr 1.05fr 1.05fr;
+        gap: 18px;
+        margin-top: 30px;
+      }
+
+      .podcast-list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .podcast-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 12px;
+        border-radius: 12px;
+        border: 1px solid transparent;
+      }
+
+      .podcast-item.active {
+        background: rgba(255,255,255,0.5);
+        border-color: var(--line);
+      }
+
+      .podcast-thumb {
+        width: 54px;
+        height: 54px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #f3d7d2, #cdd7f5);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .podcast-thumb::before {
+        content: "";
+        position: absolute;
+        inset: 10px;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.65);
+      }
+
+      .podcast-meta {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .podcast-title {
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.5;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .podcast-sub {
+        margin-top: 3px;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .podcast-score {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .soundbooks {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .soundbook-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 12px;
+        border-radius: 12px;
+      }
+
+      .soundbook-cover {
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        background: linear-gradient(140deg, #f0d9d2, #d7daf4);
+        position: relative;
+      }
+
+      .soundbook-cover::before {
+        content: "";
+        position: absolute;
+        inset: 10px;
+        border-radius: 8px 8px 10px 10px;
+        background: rgba(255,255,255,0.7);
+      }
+
+      .soundbook-meta {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .soundbook-title {
+        font-size: 14px;
+        font-weight: 700;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .soundbook-sub {
+        margin-top: 4px;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .soundbook-rank {
+        font-size: 12px;
+        color: #7b8395;
+      }
+
+      .player-bar {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 82px;
+        background: rgba(249,250,252,0.92);
+        backdrop-filter: blur(10px);
+        border-top: 1px solid var(--line);
+        display: flex;
+        justify-content: center;
+        z-index: 20;
+      }
+
+      .player-inner {
+        width: calc(100% - 42px);
+        max-width: 1400px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+      }
+
+      .play-user {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 240px;
+      }
+
+      .play-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #f5d6cb, #d8deff);
+        position: relative;
+      }
+
+      .play-avatar::before {
+        content: "";
+        position: absolute;
+        left: 12px;
+        top: 9px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.8);
+      }
+
+      .play-avatar::after {
+        content: "";
+        position: absolute;
+        left: 8px;
+        bottom: 7px;
+        width: 26px;
+        height: 14px;
+        border-radius: 18px 18px 9px 9px;
+        background: rgba(255,255,255,0.7);
+      }
+
+      .play-title {
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .play-sub {
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .controls-group {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+      }
+
+      .circle-btn {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        position: relative;
+        background: rgba(255,255,255,0.7);
+      }
+
+      .circle-btn.prev::before,
+      .circle-btn.next::before,
+      .circle-btn.play::before,
+      .circle-btn.loop::before,
+      .circle-btn.list::before,
+      .circle-btn.vol::before {
+        content: "";
+        position: absolute;
+      }
+
+      .circle-btn.prev::before {
+        left: 7px;
+        top: 6px;
+        width: 8px;
+        height: 8px;
+        background: #3a3d45;
+        clip-path: polygon(0 50%, 75% 0, 75% 100%);
+      }
+
+      .circle-btn.next::before {
+        left: 7px;
+        top: 6px;
+        width: 8px;
+        height: 8px;
+        background: #3a3d45;
+        clip-path: polygon(25% 0, 100% 50%, 25% 100%, 0 100%, 0 0);
+      }
+
+      .circle-btn.play {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #ff5365, #d7344b);
+        box-shadow: 0 10px 18px rgba(217,63,75,0.25);
+      }
+
+      .circle-btn.play::before {
+        left: 15px;
+        top: 12px;
+        width: 12px;
+        height: 16px;
+        background: #fff;
+        clip-path: polygon(0 0, 100% 50%, 0 100%);
+      }
+
+      .circle-btn.loop::before {
+        left: 6px;
+        top: 6px;
+        width: 10px;
+        height: 10px;
+        background: #3a3d45;
+        clip-path: polygon(0 40%, 20% 40%, 20% 15%, 58% 15%, 58% 30%, 100% 30%, 100% 70%, 58% 70%, 58% 85%, 20% 85%, 20% 60%, 0 60%);
+      }
+
+      .time-bar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 360px;
+      }
+
+      .time-text {
+        font-size: 11px;
+        color: #7d8699;
+      }
+
+      .progress {
+        position: relative;
+        flex: 1;
+        height: 4px;
+        border-radius: 10px;
+        background: #ebeff4;
+      }
+
+      .progress::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 36%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #ee8a93, #d93f4b);
+      }
+
+      .progress::after {
+        content: "";
+        position: absolute;
+        left: 36%;
+        top: 50%;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        background: #fff;
+        border: 2px solid #d93f4b;
+        box-shadow: 0 0 0 3px rgba(217,63,75,0.08);
+      }
+
+      .right-meta {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        width: 200px;
+        justify-content: flex-end;
+      }
+
+      .circle-btn.vol::before {
+        left: 7px;
+        top: 5px;
+        width: 11px;
+        height: 11px;
+        background: #3a3d45;
+        clip-path: polygon(0 35%, 25% 35%, 50% 10%, 50% 90%, 25% 65%, 0 65%);
+      }
+
+      .volume {
+        width: 72px;
+        height: 4px;
+        background: #eef1f5;
+        border-radius: 10px;
+        position: relative;
+      }
+
+      .volume::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 58%;
+        background: linear-gradient(90deg, #90aad4, #b4c7eb);
+        border-radius: inherit;
+      }
+
+      .circle-btn.list::before {
+        left: 5px;
+        top: 5px;
+        width: 12px;
+        height: 12px;
+        background: #3a3d45;
+        clip-path: polygon(0 10%, 100% 10%, 100% 22%, 0 22%, 0 46%, 100% 46%, 100% 58%, 0 58%, 0 82%, 100% 82%, 100% 94%, 0 94%);
+      }
+
+      @media (max-width: 1360px) {
+        .cards {
+          grid-template-columns: repeat(4, minmax(180px, 1fr));
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <div class="brand">
+          <span class="brand-mark"></span>
+          <span>网易云音乐</span>
+        </div>
+
+        <nav class="menu">
+          <a class="menu-item active" href="#"><span class="menu-icon"></span>推荐</a>
+          <a class="menu-item" href="#"><span class="menu-icon"></span>发现</a>
+          <a class="menu-item" href="#"><span class="menu-icon"></span>播客</a>
+          <a class="menu-item" href="#"><span class="menu-icon"></span>视频</a>
+          <a class="menu-item" href="#"><span class="menu-icon"></span>关注</a>
+        </nav>
+
+        <div class="section-group">
+          <div class="group-title">我的</div>
+          <div class="mini-list">
+            <div class="mini-item"><span class="mini-avatar"></span><span class="mini-label">我喜欢的音乐</span></div>
+            <div class="mini-item"><span class="mini-avatar"></span><span class="mini-label">最近播放</span></div>
+            <div class="mini-item"><span class="mini-avatar"></span><span class="mini-label">我的收藏</span></div>
+          </div>
+        </div>
+
+        <div class="section-group">
+          <div class="group-title">创建的歌单</div>
+          <div class="mini-list">
+            <div class="mini-item"><span class="mini-avatar"></span><span class="mini-label">歌单 1</span></div>
+            <div class="mini-item"><span class="mini-avatar"></span><span class="mini-label">歌单 2</span></div>
+            <div class="mini-item"><span class="mini-avatar"></span><span class="mini-label">歌单 3</span></div>
+          </div>
+        </div>
+
+        <div class="sidebar-footer">
+          <div class="user-badge">
+            <div class="user-head"></div>
+            <div class="user-meta">
+              <div class="user-name">99 God</div>
+              <div class="user-desc">VIP</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="content">
+        <header class="topbar">
+          <div class="search-box">
+            <span class="search-icon"></span>
+            <span class="search-text">搜索</span>
+          </div>
+
+          <div class="toolbar">
+            <div class="user-pill">
+              <div class="dot"></div>
+              <span>您好，欢迎</span>
+            </div>
+            <div class="tool-btn"></div>
+            <div class="tool-btn"></div>
+            <div class="tool-btn"></div>
+          </div>
+        </header>
+
+        <div class="tag-bar">
+          <button class="chip active">精选</button>
+          <button class="chip">歌单广场</button>
+          <button class="chip">排行榜</button>
+          <button class="chip">歌手</button>
+          <button class="chip">华语</button>
+          <button class="chip">说唱</button>
+          <button class="chip">欧美</button>
+          <button class="chip">更多</button>
+        </div>
+
+        <section class="main-box">
+          <div class="panel-title">
+            <h3>官方歌单</h3>
+            <div class="arrow" aria-label="更多"></div>
+          </div>
+
+          <div class="cards">
+            <div class="album-card">
+              <div class="album-cover">
+                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80" alt="影视" />
+                <span class="count">332.2万</span>
+              </div>
+              <div class="album-name">影视</div>
+              <div class="album-desc">电影感与热烈情绪，让人一听就被吸住</div>
+            </div>
+
+            <div class="album-card">
+              <div class="album-cover">
+                <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80" alt="流行" />
+                <span class="count">814.2万</span>
+              </div>
+              <div class="album-name">流行</div>
+              <div class="album-desc">都市风格与清亮旋律兼具，适合通勤时听</div>
+            </div>
+
+            <div class="album-card">
+              <div class="album-cover">
+                <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=800&q=80" alt="钢琴" />
+                <span class="count">1255.8万</span>
+              </div>
+              <div class="album-name">钢琴</div>
+              <div class="album-desc">柔和音色和轻节奏，让思绪慢慢沉下来</div>
+            </div>
+
+            <div class="album-card">
+              <div class="album-cover">
+                <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80" alt="粤语" />
+                <span class="count">156.9万</span>
+              </div>
+              <div class="album-name">粤语</div>
+              <div class="album-desc">温柔嗓音和风景感，一首歌就像一场故事</div>
+            </div>
+
+            <div class="album-card">
+              <div class="album-cover">
+                <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=800&q=80" alt="下班" />
+                <span class="count">84.4万</span>
+              </div>
+              <div class="album-name">下班</div>
+              <div class="album-desc">一部工作后、舒适又不失活力的放松歌单</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="podcast-layout">
+          <div class="podcast-list">
+            <div class="podcast-item active">
+              <div class="podcast-thumb"></div>
+              <div class="podcast-meta">
+                <div class="podcast-title">想看什么都行</div>
+                <div class="podcast-sub">歌手：陈乔恩</div>
+              </div>
+              <div class="podcast-score">3.7</div>
+            </div>
+
+            <div class="podcast-item">
+              <div class="podcast-thumb" style="background:linear-gradient(135deg,#d9dbe8,#f5d7cb);"></div>
+              <div class="podcast-meta">
+                <div class="podcast-title">全民心动</div>
+                <div class="podcast-sub">歌手：魏如萱</div>
+              </div>
+              <div class="podcast-score">3.4</div>
+            </div>
+
+            <div class="podcast-item">
+              <div class="podcast-thumb" style="background:linear-gradient(135deg,#dfe8ea,#d9d0ef);"></div>
+              <div class="podcast-meta">
+                <div class="podcast-title">无与伦比</div>
+                <div class="podcast-sub">歌手：周柏豪</div>
+              </div>
+              <div class="podcast-score">2.9</div>
+            </div>
+          </div>
+
+          <div class="podcast-list">
+            <div class="podcast-item">
+              <div class="podcast-thumb" style="background:linear-gradient(135deg,#f0d8d8,#d0d9f7);"></div>
+              <div class="podcast-meta">
+                <div class="podcast-title">温柔的手</div>
+                <div class="podcast-sub">歌手：星野</div>
+              </div>
+              <div class="podcast-score">3.8</div>
+            </div>
+
+            <div class="podcast-item">
+              <div class="podcast-thumb" style="background:linear-gradient(135deg,#f5e3c6,#dfe5ef);"></div>
+              <div class="podcast-meta">
+                <div class="podcast-title">夏天的热爱</div>
+                <div class="podcast-sub">歌手：Halsey</div>
+              </div>
+              <div class="podcast-score">4.3</div>
+            </div>
+
+            <div class="podcast-item">
+              <div class="podcast-thumb" style="background:linear-gradient(135deg,#e4d5f9,#d4e9f2);"></div>
+              <div class="podcast-meta">
+                <div class="podcast-title">燃烧的心</div>
+                <div class="podcast-sub">歌手：Miyazaki</div>
+              </div>
+              <div class="podcast-score">2.8</div>
+            </div>
+          </div>
+
+          <div class="soundbooks">
+            <div class="soundbook-item">
+              <div class="soundbook-cover"></div>
+              <div class="soundbook-meta">
+                <div class="soundbook-title">陪你聊聊生活</div>
+                <div class="soundbook-sub">共 28.7 万次播放</div>
+              </div>
+              <div class="soundbook-rank">9.2分</div>
+            </div>
+
+            <div class="soundbook-item">
+              <div class="soundbook-cover" style="background:linear-gradient(140deg,#efd7d1,#d5e4f8);"></div>
+              <div class="soundbook-meta">
+                <div class="soundbook-title">跟着风走</div>
+                <div class="soundbook-sub">共 17.8 万次播放</div>
+              </div>
+              <div class="soundbook-rank">8.9分</div>
+            </div>
+
+            <div class="soundbook-item">
+              <div class="soundbook-cover" style="background:linear-gradient(140deg,#dfe4f2,#e5d0d6);"></div>
+              <div class="soundbook-meta">
+                <div class="soundbook-title">夜晚的足迹</div>
+                <div class="soundbook-sub">共 15.4 万次播放</div>
+              </div>
+              <div class="soundbook-rank">8.7分</div>
+            </div>
+
+            <div class="soundbook-item">
+              <div class="soundbook-cover" style="background:linear-gradient(140deg,#d8ebef,#f0d9d0);"></div>
+              <div class="soundbook-meta">
+                <div class="soundbook-title">最好的明天</div>
+                <div class="soundbook-sub">共 8.8 万次播放</div>
+              </div>
+              <div class="soundbook-rank">8.5分</div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <footer class="player-bar">
+      <div class="player-inner">
+        <div class="play-user">
+          <div class="play-avatar"></div>
+          <div>
+            <div class="play-title">心动</div>
+            <div class="play-sub">Ariana / Ocean</div>
+          </div>
+        </div>
+
+        <div class="controls-group">
+          <div class="circle-btn prev"></div>
+          <div class="circle-btn play"></div>
+          <div class="circle-btn next"></div>
+          <div class="circle-btn loop"></div>
+        </div>
+
+        <div class="time-bar">
+          <span class="time-text">1:25</span>
+          <div class="progress"></div>
+          <span class="time-text">3:56</span>
+        </div>
+
+        <div class="right-meta">
+          <div class="circle-btn vol"></div>
+          <div class="volume"></div>
+          <div class="circle-btn list"></div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

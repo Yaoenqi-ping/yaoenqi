@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>10-2 幻灯片</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #f5f7ff, #eef4f8);
+      font-family: Arial, "Microsoft YaHei", sans-serif;
+    }
+    .slider {
+      width: 420px;
+      background: #fff;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 18px 35px rgba(77, 101, 140, 0.18);
+    }
+    .slider-header {
+      padding: 18px 20px 12px;
+      text-align: center;
+      color: #2d3a52;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      background: #f8fbff;
+    }
+    .slides {
+      position: relative;
+      height: 420px;
+      overflow: hidden;
+    }
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      animation: slideUp 16s infinite;
+    }
+    .slide:nth-child(1) {
+      animation-delay: 0s;
+    }
+    .slide:nth-child(2) {
+      animation-delay: 4s;
+      animation-name: slideDown;
+    }
+    .slide:nth-child(3) {
+      animation-delay: 8s;
+    }
+    .slide:nth-child(4) {
+      animation-delay: 12s;
+      animation-name: slideDown;
+    }
+    .slide img {
+      display: block;
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+    }
+    .slide .text {
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 26px;
+      font-weight: 700;
+      color: #1f2d3d;
+      background: #ffffff;
+      letter-spacing: 2px;
+    }
+    /* 奇数：从下往上进入，向上滑出 */
+    @keyframes slideUp {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      5%, 20% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      25% {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+    }
+    /* 偶数：从上往下进入，向下滑出 */
+    @keyframes slideDown {
+      0% {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      5%, 20% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      25% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="slider">
+    <div class="slider-header">药恩祈</div>
+    <div class="slides">
+      <div class="slide">
+        <img src="img/1.jpg" alt="1.jpg" />
+        <div class="text">药恩祈</div>
+      </div>
+      <div class="slide">
+        <img src="img/a1.jpg" alt="a1.jpg" />
+        <div class="text">药恩祈</div>
+      </div>
+      <div class="slide">
+        <img src="img/a2.jpg" alt="a2.jpg" />
+        <div class="text">药恩祈</div>
+      </div>
+      <div class="slide">
+        <img src="img/a3.jpg" alt="a3.jpg" />
+        <div class="text">药恩祈</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

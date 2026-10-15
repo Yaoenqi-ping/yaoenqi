@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>631药恩祈</title>
+    <style>
+        p{
+            color: rgb(8, 53, 158);
+            font-size: 50px;
+        }
+        #box{
+            width: 600px;
+            height: 500px;
+            background-color: rgba(31, 60, 205, 0.479);
+            color: white; 
+        }
+        #box p{
+            color:white;
+        }
+        .n1{
+            color: rgb(255, 0, 0);
+        }
+        /*扩展2 h2黑底白字*/
+        h2{
+            background-color: black;
+            color:white;
+        }
+        /*扩展3 新增盒子 宽300高300*/
+        #box2{
+            width:300px;
+            height:300px;
+            background-color:orange;
+        }
+        /*扩展1：名字每个字不同颜色 同一行 */
+        .z1{
+            color:red;
+        }
+        .z2{
+            color:green;
+        }
+        .z3{
+            color:yellow;
+        }
+        /*CSS单独设置颜色，选择器白色*/
+        .css-text{
+            color:#ffdd00;
+        }
+        .sel-text{
+            color:#ffffff;
+        }
+    </style>
+</head>
+<body>
+    <h2>层叠样式表 CSS</h2>
+    <div id="box">
+        <p><span class="css-text">CSS</span><span class="sel-text">选择器</span></p>
+        <!--扩展1：名字三个字分别上色-->
+        <p><span class="z1">药</span><span class="z2">恩</span><span class="z3">祈</span></p>
+        <p>CSS属性</p>
+    </div>
+    <div id="box2">
+        新增300*300盒子
+    </div>
+</body>
+</html>

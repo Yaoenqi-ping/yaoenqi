@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>10-3 媒体查询响应式</title>
+  <style>
+    :root {
+      font-size: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      font-family: Arial, "Microsoft YaHei", sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f3f5f9;
+    }
+
+    .full-box {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+      transition: background-color 0.5s ease;
+      background-color: #dfe9ff;
+    }
+
+    .title {
+      margin: 0;
+      color: #1f2d3d;
+      font-size: 3rem;
+      font-weight: 700;
+      letter-spacing: 0.25rem;
+      text-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.12);
+      transition: font-size 0.4s ease, color 0.4s ease;
+    }
+
+    @media (max-width: 768px) {
+      .full-box {
+        background-color: #d9f7e8;
+      }
+
+      .title {
+        font-size: 2rem;
+        color: #123b2a;
+      }
+    }
+
+    @media (min-width: 769px) and (max-width: 1200px) {
+      .full-box {
+        background-color: #ffe8d6;
+      }
+
+      .title {
+        font-size: 2.8rem;
+        color: #5a2d12;
+      }
+    }
+
+    @media (min-width: 1201px) {
+      .full-box {
+        background: linear-gradient(135deg, #d9ecff, #ffd7ea);
+      }
+
+      .title {
+        font-size: 4rem;
+        color: #342b5f;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="full-box">
+    <h1 class="title">药恩祈</h1>
+  </div>
+</body>
+</html>

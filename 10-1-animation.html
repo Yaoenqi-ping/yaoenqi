@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>10-1 背景圆动画</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f5f5f5;
+      overflow: hidden;
+      font-family: Arial, "Microsoft YaHei", sans-serif;
+    }
+
+    .scene {
+      position: relative;
+      width: 420px;
+      height: 420px;
+      border-radius: 28px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+      overflow: hidden;
+      background: linear-gradient(135deg, #fff0f0, #ebf3ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .name {
+      position: relative;
+      z-index: 2;
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: 0.2rem;
+      color: #1f2d3d;
+      text-shadow: 0 4px 12px rgba(255, 255, 255, 0.7);
+    }
+
+    .orb {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      filter: blur(10px);
+      opacity: 0.9;
+    }
+
+    .orb-1 {
+      width: 180px;
+      height: 180px;
+      background: rgba(255, 107, 107, 0.9);
+      animation: orbGrow 8s ease-in-out infinite;
+    }
+
+    .orb-2 {
+      width: 120px;
+      height: 120px;
+      background: rgba(77, 171, 247, 0.9);
+      animation: orbShrink 8s ease-in-out infinite;
+    }
+
+    @keyframes orbGrow {
+      0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        background: rgba(255, 107, 107, 0.9);
+      }
+      25% {
+        transform: translate(-50%, -50%) scale(1.3);
+        background: rgba(255, 162, 88, 0.9);
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.8);
+        background: rgba(127, 209, 74, 0.9);
+      }
+      75% {
+        transform: translate(-50%, -50%) scale(1.1);
+        background: rgba(109, 125, 255, 0.9);
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(0.8);
+        background: rgba(255, 107, 107, 0.9);
+      }
+    }
+
+    @keyframes orbShrink {
+      0% {
+        transform: translate(-50%, -50%) scale(1.6);
+        background: rgba(77, 171, 247, 0.9);
+      }
+      25% {
+        transform: translate(-50%, -50%) scale(1.1);
+        background: rgba(121, 92, 255, 0.9);
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(0.7);
+        background: rgba(82, 202, 160, 0.9);
+      }
+      75% {
+        transform: translate(-50%, -50%) scale(1.3);
+        background: rgba(255, 120, 178, 0.9);
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1.6);
+        background: rgba(77, 171, 247, 0.9);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="scene">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="name">药恩祈</div>
+  </div>
+</body>
+</html>

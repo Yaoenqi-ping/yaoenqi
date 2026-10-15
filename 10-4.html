@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>10-4 响应式盒子布局</title>
+  <style>
+    :root {
+      font-size: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      font-family: Arial, "Microsoft YaHei", sans-serif;
+      background: linear-gradient(135deg, #f7f8ff, #edf5ff);
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .container {
+      width: min(90vw, 1000px);
+      margin: 0 auto;
+    }
+
+    .title {
+      margin: 0 0 1.5rem;
+      text-align: center;
+      font-size: 2rem;
+      color: #2c3a52;
+      letter-spacing: 0.2rem;
+    }
+
+    .box-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .box {
+      flex: 1 1 20%;
+      min-width: 7rem;
+      height: 7rem;
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, #6aa9ff, #7d6bff);
+      box-shadow: 0 0.75rem 1.5rem rgba(77, 101, 140, 0.18);
+    }
+
+    .box:nth-child(2n) {
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    }
+
+    .box:nth-child(3n) {
+      background: linear-gradient(135deg, #a8e063, #56ab2f);
+    }
+
+    .box:nth-child(4n) {
+      background: linear-gradient(135deg, #ffd76a, #ff8c42);
+    }
+
+    @media (max-width: 900px) {
+      .box-wrap {
+        gap: 0.75rem;
+      }
+
+      .box {
+        flex-basis: calc(33.333% - 0.75rem);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .title {
+        font-size: 1.6rem;
+      }
+
+      .box {
+        flex-basis: calc(50% - 0.75rem);
+      }
+    }
+
+    @media (max-width: 360px) {
+      .box {
+        flex-basis: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">药恩祈</h1>
+    <div class="box-wrap">
+      <div class="box">1</div>
+      <div class="box">2</div>
+      <div class="box">3</div>
+      <div class="box">4</div>
+      <div class="box">5</div>
+      <div class="box">6</div>
+      <div class="box">7</div>
+      <div class="box">8</div>
+    </div>
+  </div>
+</body>
+</html>

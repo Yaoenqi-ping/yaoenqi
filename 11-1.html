@@ -1,0 +1,157 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web前端的长度单位</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            padding: 30px;
+            line-height: 1.6;
+        }
+
+        h1 { text-align: center; color: #2c3e50; margin-bottom: 10px; }
+
+        .subtitle { text-align: center; color: #7f8c8d; margin-bottom: 30px; }
+
+        h2 {
+            color: #2980b9;
+            border-left: 4px solid #2980b9;
+            padding-left: 10px;
+            margin: 30px 0 15px;
+            font-size: 20px;
+        }
+
+        .desc { font-size: 14px; color: #666; margin-bottom: 15px; }
+
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .box {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .cm  { width: 5cm;  }
+        .mm  { width: 50mm; }
+        .in  { width: 2in;  }
+        .pt  { width: 100pt; }
+        .pc  { width: 10pc; }
+        .px  { width: 200px; }
+
+        .em-box   { font-size: 20px; }
+        .em-child { width: 5em; }
+        .rem-box  { width: 5rem; }
+        .percent-parent { width: 400px; background: #ecf0f1; padding: 10px; }
+        .percent-child  { width: 50%; }
+        .vw-box { width: 20vw; }
+        .vh-box { height: 15vh; display: flex; align-items: center; justify-content: center; }
+
+        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+
+        table th, table td { border: 1px solid #e0e0e0; padding: 10px; text-align: left; }
+
+        table th { background: #2980b9; color: #fff; }
+
+        table tr:nth-child(even) { background: #f9fbfd; }
+
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #c7254e;
+            font-family: Consolas, monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Web 前端的长度单位</h1>
+    <p class="subtitle">CSS 中用于定义尺寸的各类长度单位演示</p>
+
+    <h2>一、绝对长度单位</h2>
+    <p class="desc">绝对长度单位是固定的，不随其他因素变化（像素在不同设备上可能受 DPI 影响）。</p>
+
+    <div class="card">
+        <div class="box cm">5cm（厘米）</div>
+        <div class="box mm">50mm（毫米）</div>
+        <div class="box in">2in（英寸）</div>
+        <div class="box pt">100pt（点，1pt = 1/72 英寸）</div>
+        <div class="box pc">10pc（派卡，1pc = 12pt）</div>
+        <div class="box px">200px（像素）</div>
+    </div>
+
+    <h2>二、相对长度单位</h2>
+    <p class="desc">相对长度单位基于其他尺寸（如父元素字体、根元素字体、视口等）动态计算。</p>
+
+    <div class="card">
+        <h3 style="font-size:16px;margin-bottom:10px;">em —— 相对于当前元素字体大小</h3>
+        <p class="desc">父容器字体 20px，子元素 <code>width: 5em</code> = 100px</p>
+        <div class="em-box">
+            <div class="box em-child">5em（父字体 20px × 5 = 100px）</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 style="font-size:16px;margin-bottom:10px;">rem —— 相对于根元素（html）字体大小</h3>
+        <p class="desc">根字体默认 16px，<code>width: 5rem</code> = 80px</p>
+        <div class="box rem-box">5rem（根字体 16px × 5 = 80px）</div>
+    </div>
+
+    <div class="card">
+        <h3 style="font-size:16px;margin-bottom:10px;">% —— 相对于父元素</h3>
+        <p class="desc">父容器宽 400px，子元素 <code>width: 50%</code> = 200px</p>
+        <div class="percent-parent">
+            <div class="box percent-child">50%（父宽 400px 的 50%）</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 style="font-size:16px;margin-bottom:10px;">vw / vh —— 相对于视口</h3>
+        <p class="desc"><code>1vw</code> = 视口宽度的 1%，<code>1vh</code> = 视口高度的 1%</p>
+        <div class="box vw-box">20vw（视口宽度 20%）</div>
+        <div class="box vh-box">15vh（视口高度 15%）</div>
+    </div>
+
+    <h2>三、单位对照表</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>单位</th>
+                <th>名称</th>
+                <th>类型</th>
+                <th>参考基准</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td><code>px</code></td><td>像素</td><td>绝对</td><td>设备像素（最常用）</td></tr>
+            <tr><td><code>cm</code></td><td>厘米</td><td>绝对</td><td>1cm = 37.8px</td></tr>
+            <tr><td><code>mm</code></td><td>毫米</td><td>绝对</td><td>1mm = 0.1cm</td></tr>
+            <tr><td><code>in</code></td><td>英寸</td><td>绝对</td><td>1in = 2.54cm = 96px</td></tr>
+            <tr><td><code>pt</code></td><td>点</td><td>绝对</td><td>1pt = 1/72in</td></tr>
+            <tr><td><code>pc</code></td><td>派卡</td><td>绝对</td><td>1pc = 12pt</td></tr>
+            <tr><td><code>em</code></td><td>相对字体</td><td>相对</td><td>当前元素字体大小</td></tr>
+            <tr><td><code>rem</code></td><td>根相对字体</td><td>相对</td><td>根元素字体大小</td></tr>
+            <tr><td><code>%</code></td><td>百分比</td><td>相对</td><td>父元素对应属性</td></tr>
+            <tr><td><code>vw</code></td><td>视口宽度</td><td>相对</td><td>视口宽度的 1%</td></tr>
+            <tr><td><code>vh</code></td><td>视口高度</td><td>相对</td><td>视口高度的 1%</td></tr>
+            <tr><td><code>vmin</code></td><td>视口较小边</td><td>相对</td><td>vw 与 vh 中较小者</td></tr>
+            <tr><td><code>vmax</code></td><td>视口较大边</td><td>相对</td><td>vw 与 vh 中较大者</td></tr>
+        </tbody>
+    </table>
+</body>
+</html>
