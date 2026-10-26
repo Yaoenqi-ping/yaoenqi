@@ -238,26 +238,132 @@
 
             <section class="panel">
                 <h2>项目作品链接</h2>
-                <div class="links-grid">
-                    <a class="work-link" href="index.html"><span class="num">00</span><span>首页</span></a>
-                    <a class="work-link" href="1.html"><span class="num">01</span><span>1.html</span></a>
-                    <a class="work-link" href="2-1.html"><span class="num">02</span><span>2-1.html</span></a>
-                    <a class="work-link" href="2-2.html"><span class="num">03</span><span>2-2.html</span></a>
-                    <a class="work-link" href="3-1.html"><span class="num">04</span><span>3-1.html</span></a>
-                    <a class="work-link" href="3-2.html"><span class="num">05</span><span>3-2.html</span></a>
-                    <a class="work-link" href="4-1%20css.html"><span class="num">06</span><span>4-1 css.html</span></a>
-                    <a class="work-link" href="5-1%E5%B1%82%E5%8F%A0%E4%B8%8E%E7%BB%A7%E6%89%BF.html"><span class="num">07</span><span>5-1层叠与继承.html</span></a>
-                    <a class="work-link" href="5-2%E7%9B%92%E6%A8%A1%E5%9E%8B.html"><span class="num">08</span><span>5-2盒模型.html</span></a>
-                    <a class="work-link" href="6-1%20flex.html"><span class="num">09</span><span>6-1 flex.html</span></a>
-                    <a class="work-link" href="6-2.html"><span class="num">10</span><span>6-2.html</span></a>
-                    <a class="work-link" href="7-1.html"><span class="num">11</span><span>7-1.html</span></a>
-                    <a class="work-link" href="7-2%20%E5%B7%A6%E5%9B%BE%E5%8F%B3%E6%96%87.html"><span class="num">12</span><span>7-2 左图右文.html</span></a>
-                    <a class="work-link" href="8-1%20css3%E9%80%89%E6%8B%A9%E5%99%A8.html"><span class="num">13</span><span>8-1 css3选择器.html</span></a>
-                    <a class="work-link" href="9-1%20transition.html"><span class="num">14</span><span>9-1 transition.html</span></a>
+                <div class="links-grid" id="linksGrid">
+                    <a class="work-link" href="1.html" data-file="1.html"><span class="num">01</span><span>1.html</span></a>
+                    <a class="work-link" href="2-1.html" data-file="2-1.html"><span class="num">02</span><span>2-1.html</span></a>
+                    <a class="work-link" href="2-2.html" data-file="2-2.html"><span class="num">03</span><span>2-2.html</span></a>
+                    <a class="work-link" href="3-1.html" data-file="3-1.html"><span class="num">04</span><span>3-1.html</span></a>
+                    <a class="work-link" href="3-2.html" data-file="3-2.html"><span class="num">05</span><span>3-2.html</span></a>
+                    <a class="work-link" href="4-1%20css.html" data-file="4-1 css.html"><span class="num">06</span><span>4-1 css.html</span></a>
+                    <a class="work-link" href="5-1%E5%B1%82%E5%8F%A0%E4%B8%8E%E7%BB%A7%E6%89%BF.html" data-file="5-1层叠与继承.html"><span class="num">07</span><span>5-1层叠与继承.html</span></a>
+                    <a class="work-link" href="5-2%E7%9B%92%E6%A8%A1%E5%9E%8B.html" data-file="5-2盒模型.html"><span class="num">08</span><span>5-2盒模型.html</span></a>
+                    <a class="work-link" href="6-1%20flex.html" data-file="6-1 flex.html"><span class="num">09</span><span>6-1 flex.html</span></a>
+                    <a class="work-link" href="6-2.html" data-file="6-2.html"><span class="num">10</span><span>6-2.html</span></a>
+                    <a class="work-link" href="7-1.html" data-file="7-1.html"><span class="num">11</span><span>7-1.html</span></a>
+                    <a class="work-link" href="7-2%20%E5%B7%A6%E5%9B%BE%E5%8F%B3%E6%96%87.html" data-file="7-2 左图右文.html"><span class="num">12</span><span>7-2 左图右文.html</span></a>
+                    <a class="work-link" href="8-1%20css3%E9%80%89%E6%8B%A9%E5%99%A8.html" data-file="8-1 css3选择器.html"><span class="num">13</span><span>8-1 css3选择器.html</span></a>
+                    <a class="work-link" href="9-1%20transition.html" data-file="9-1 transition.html"><span class="num">14</span><span>9-1 transition.html</span></a>
+                    <a class="work-link" href="10-1-animation.html" data-file="10-1-animation.html"><span class="num">15</span><span>10-1-animation.html</span></a>
+                    <a class="work-link" href="10-2.html" data-file="10-2.html"><span class="num">16</span><span>10-2.html</span></a>
+                    <a class="work-link" href="10-3.html" data-file="10-3.html"><span class="num">17</span><span>10-3.html</span></a>
+                    <a class="work-link" href="10-4.html" data-file="10-4.html"><span class="num">18</span><span>10-4.html</span></a>
+                    <a class="work-link" href="11-1.html" data-file="11-1.html"><span class="num">19</span><span>11-1.html</span></a>
+                    <a class="work-link" href="11-2.html" data-file="11-2.html"><span class="num">20</span><span>11-2.html</span></a>
+                    <a class="work-link" href="13-1.html" data-file="13-1.html"><span class="num">21</span><span>13-1.html</span></a>
+                    <a class="work-link" href="13-2.html" data-file="13-2.html"><span class="num">22</span><span>13-2.html</span></a>
+                    <a class="work-link" href="13-3.html" data-file="13-3.html"><span class="num">23</span><span>13-3.html</span></a>
+                    <a class="work-link" href="13-4.html" data-file="13-4.html"><span class="num">24</span><span>13-4.html</span></a>
+                    <a class="work-link" href="15-1.html" data-file="15-1.html"><span class="num">25</span><span>15-1.html</span></a>
+                    <a class="work-link" href="15-2.html" data-file="15-2.html"><span class="num">26</span><span>15-2.html</span></a>
+                    <a class="work-link" href="xiangmu.html" data-file="xiangmu.html"><span class="num">27</span><span>xiangmu.html</span></a>
                 </div>
-                <div class="footer-note">注：页面使用原生 HTML/CSS，未接入任何 CDN。</div>
+                <div class="footer-note" id="linksStatus">本地列表共 27 个页面，联网后自动同步新增页面。</div>
             </section>
         </main>
     </div>
+
+    <script>
+        (function () {
+            var REPO = "Yaoenqi-ping/yaoenqi";
+            var BRANCH = "master";
+            var grid = document.getElementById("linksGrid");
+            var status = document.getElementById("linksStatus");
+
+            function isPage(name) {
+                return /\.html?$/i.test(name) && name.toLowerCase() !== "index.html";
+            }
+
+            function naturalCompare(a, b) {
+                return a.localeCompare(b, "zh-CN", { numeric: true, sensitivity: "base" });
+            }
+
+            function currentFiles() {
+                return Array.prototype.map.call(grid.querySelectorAll(".work-link"), function (link) {
+                    return link.getAttribute("data-file");
+                });
+            }
+
+            function render(files) {
+                var seen = {};
+
+                var list = files.filter(function (name) {
+                    var key = name.toLowerCase();
+
+                    if (!name || !isPage(name) || seen[key]) {
+                        return false;
+                    }
+
+                    seen[key] = true;
+                    return true;
+                }).sort(naturalCompare);
+
+                var fragment = document.createDocumentFragment();
+
+                list.forEach(function (name, index) {
+                    var link = document.createElement("a");
+                    link.className = "work-link";
+                    link.href = encodeURI(name);
+                    link.setAttribute("data-file", name);
+
+                    var num = document.createElement("span");
+                    num.className = "num";
+                    num.textContent = index < 9 ? "0" + (index + 1) : String(index + 1);
+
+                    var label = document.createElement("span");
+                    label.textContent = name;
+
+                    link.appendChild(num);
+                    link.appendChild(label);
+                    fragment.appendChild(link);
+                });
+
+                grid.innerHTML = "";
+                grid.appendChild(fragment);
+
+                return list.length;
+            }
+
+            function syncFromGitHub() {
+                fetch("https://api.github.com/repos/" + REPO + "/contents/?ref=" + BRANCH, {
+                    headers: { Accept: "application/vnd.github+json" }
+                })
+                    .then(function (response) {
+                        if (!response.ok) {
+                            throw new Error("HTTP " + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(function (items) {
+                        if (!Array.isArray(items)) {
+                            throw new Error("数据格式错误");
+                        }
+
+                        var remoteFiles = items.filter(function (item) {
+                            return item.type === "file" && isPage(item.name);
+                        }).map(function (item) {
+                            return item.name;
+                        });
+
+                        var count = render(currentFiles().concat(remoteFiles));
+                        status.textContent = "已自动同步 GitHub 仓库，共 " + count + " 个页面。";
+                    })
+                    .catch(function () {
+                        status.textContent = "当前显示本地预置列表，联网后自动同步新增页面。";
+                    });
+            }
+
+            syncFromGitHub();
+        })();
+    </script>
 </body>
 </html>
