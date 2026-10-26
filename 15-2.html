@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<!--
+  作者：药恩祈
+  建立时间：2026-10-26 14:38
+  使用大模型：deepseek/deepseek-flash
+  功能名称：JavaScript 程序结构、循环与条件演示
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="24001010631 药恩祈">
+  <title>15-2 JavaScript 程序结构</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --ink: #252a41;
+      --muted: #6f7691;
+      --line: #e6e8f2;
+      --accent: #5b5bd6;
+      --accent-soft: #efefff;
+      --card: #ffffff;
+    }
+
+    body {
+      font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      min-height: 100vh;
+      padding: 34px 18px 54px;
+      background: linear-gradient(160deg, #eef1ff 0%, #f7f4ff 48%, #eaf7fb 100%);
+      color: var(--ink);
+      line-height: 1.7;
+    }
+
+    .page {
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 34px 30px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #353a7a 0%, #5b5bd6 58%, #7c6fe0 100%);
+      color: #fff;
+      box-shadow: 0 20px 44px rgba(72, 74, 168, 0.26);
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .hero::before {
+      width: 220px;
+      height: 220px;
+      top: -110px;
+      right: -50px;
+    }
+
+    .hero::after {
+      width: 130px;
+      height: 130px;
+      bottom: -80px;
+      right: 150px;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      font-size: 12px;
+      letter-spacing: 2px;
+      margin-bottom: 14px;
+    }
+
+    .hero h1 {
+      position: relative;
+      z-index: 1;
+      font-size: 30px;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .hero p {
+      position: relative;
+      z-index: 1;
+      max-width: 640px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .hero-keywords {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .hero-keywords span {
+      padding: 4px 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.14);
+      font-size: 12px;
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .section {
+      margin-top: 38px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .section-num {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border-radius: 8px;
+      padding: 3px 9px;
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .section-head h2 {
+      font-size: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .structure-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .structure-card {
+      padding: 22px;
+      border-radius: 18px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: 0 8px 22px rgba(53, 58, 122, 0.06);
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .structure-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 30px rgba(53, 58, 122, 0.12);
+    }
+
+    .structure-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 20px;
+      font-weight: 700;
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .structure-card:nth-child(2) .structure-icon {
+      background: #fff2e5;
+      color: #cf6a18;
+    }
+
+    .structure-card:nth-child(3) .structure-icon {
+      background: #e4f7f5;
+      color: #0f9b8e;
+    }
+
+    .structure-card h3 {
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .structure-card p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    pre {
+      background: #23263d;
+      border-radius: 12px;
+      padding: 14px 16px;
+      overflow-x: auto;
+    }
+
+    code {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12.5px;
+      line-height: 1.65;
+      color: #d9dcff;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .demo-card {
+      display: flex;
+      flex-direction: column;
+      padding: 22px;
+      border-radius: 18px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: 0 8px 22px rgba(53, 58, 122, 0.06);
+    }
+
+    .demo-card.wide {
+      grid-column: 1 / -1;
+    }
+
+    .demo-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .demo-title h3 {
+      font-size: 16px;
+    }
+
+    .demo-badge {
+      font-size: 11px;
+      font-family: Consolas, "Courier New", monospace;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 2px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    .demo-desc {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    .demo-card pre {
+      margin-bottom: 14px;
+    }
+
+    .field-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    input[type="number"],
+    select {
+      flex: 1;
+      min-width: 130px;
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fafbff;
+      color: var(--ink);
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input[type="number"]:focus,
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(91, 91, 214, 0.12);
+    }
+
+    button {
+      padding: 9px 18px;
+      border: none;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 14px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      box-shadow: 0 6px 14px rgba(91, 91, 214, 0.28);
+    }
+
+    button:hover {
+      background: #4b4bc4;
+      box-shadow: 0 8px 18px rgba(91, 91, 214, 0.36);
+    }
+
+    button:active {
+      transform: scale(0.96);
+    }
+
+    .result {
+      flex: 1;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      min-height: 54px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #f7f8fd;
+      border: 1px dashed #d9dcee;
+      font-size: 14px;
+      color: var(--ink);
+    }
+
+    .result .placeholder {
+      color: #9aa0ba;
+      font-size: 13px;
+    }
+
+    .result strong {
+      color: var(--accent);
+      font-size: 17px;
+    }
+
+    .result .good {
+      color: #0f9b8e;
+      font-weight: 700;
+    }
+
+    .result .warn {
+      color: #d97706;
+      font-weight: 700;
+    }
+
+    .result .bad {
+      color: #dc2626;
+      font-weight: 700;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 36px;
+      height: 34px;
+      padding: 0 10px;
+      border-radius: 9px;
+      background: #eef1ff;
+      color: #3f4799;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: Consolas, "Courier New", monospace;
+      animation: pop 0.25s ease both;
+    }
+
+    @keyframes pop {
+      from {
+        opacity: 0;
+        transform: scale(0.6);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .chip.fizz {
+      background: #fff1e3;
+      color: #bd6017;
+    }
+
+    .chip.buzz {
+      background: #e5f3ff;
+      color: #1d6fae;
+    }
+
+    .chip.fizzbuzz {
+      background: #f1e8ff;
+      color: #7338c9;
+    }
+
+    .chip.skip {
+      background: #f2f3f8;
+      color: #a6acc2;
+      text-decoration: line-through;
+    }
+
+    .chip.stop {
+      background: #ffe9ea;
+      color: #c0392b;
+      padding: 0 12px;
+    }
+
+    .countdown-value {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 68px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #f2f3ff, #eef8fb);
+      color: var(--accent);
+      font-size: 32px;
+      font-weight: 700;
+      font-family: Consolas, "Courier New", monospace;
+      letter-spacing: 2px;
+    }
+
+    .countdown-value.done {
+      color: #0f9b8e;
+      font-size: 24px;
+      letter-spacing: 1px;
+    }
+
+    .fizzbuzz-output {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 8px;
+    }
+
+    .fizzbuzz-output .chip {
+      min-width: 0;
+      width: 100%;
+      padding: 0 4px;
+      font-size: 12px;
+    }
+
+    .page-footer {
+      margin-top: 36px;
+      text-align: center;
+      font-size: 13px;
+      letter-spacing: 1px;
+      color: #8a90ad;
+    }
+
+    .page-footer span {
+      display: inline-block;
+      padding: 7px 20px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid #e6e8f2;
+    }
+
+    @media (max-width: 900px) {
+      .structure-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .demo-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .structure-card {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 560px) {
+      body {
+        padding: 20px 12px 40px;
+      }
+
+      .hero {
+        padding: 26px 20px;
+        border-radius: 20px;
+      }
+
+      .hero h1 {
+        font-size: 24px;
+      }
+
+      .fizzbuzz-output {
+        grid-template-columns: repeat(5, 1fr);
+      }
+
+      .demo-card {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <span class="hero-tag">15-2</span>
+      <h1>JavaScript 程序结构</h1>
+      <p>任何复杂的程序，都可以拆解为顺序、选择与循环三种基本结构。下面用可交互的示例，逐一演示条件语句与循环语句的工作方式。</p>
+      <div class="hero-keywords">
+        <span>sequence</span>
+        <span>if / switch</span>
+        <span>for / while</span>
+        <span>break / continue</span>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="section-num">01</span>
+        <h2>三种基本结构</h2>
+      </div>
+      <div class="structure-grid">
+        <article class="structure-card">
+          <div class="structure-icon">&#8595;</div>
+          <h3>顺序结构</h3>
+          <p>程序按照书写顺序，从上到下逐条执行，是最基础的执行方式。</p>
+          <pre><code>let price = 12;
+let count = 3;
+let total = price * count;</code></pre>
+        </article>
+        <article class="structure-card">
+          <div class="structure-icon">?</div>
+          <h3>选择结构</h3>
+          <p>根据条件是否成立，选择执行不同的代码分支。</p>
+          <pre><code>if (total &gt;= 30) {
+  console.log("满减");
+} else {
+  console.log("原价");
+}</code></pre>
+        </article>
+        <article class="structure-card">
+          <div class="structure-icon">&#8635;</div>
+          <h3>循环结构</h3>
+          <p>在条件成立时重复执行同一段代码，避免重复书写。</p>
+          <pre><code>for (let i = 1; i &lt;= 3; i++) {
+  console.log(i);
+}</code></pre>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="section-num">02</span>
+        <h2>条件语句</h2>
+      </div>
+      <div class="demo-grid">
+        <article class="demo-card">
+          <div class="demo-title">
+            <h3>if / else if / else</h3>
+            <span class="demo-badge">条件判断</span>
+          </div>
+          <p class="demo-desc">输入 0 到 100 之间的分数，程序按区间输出对应等级。</p>
+          <pre><code>if (score &gt;= 90) {
+  grade = "优秀";
+} else if (score &gt;= 60) {
+  grade = "及格";
+} else {
+  grade = "不及格";
+}</code></pre>
+          <div class="field-row">
+            <input type="number" id="scoreInput" min="0" max="100" value="86" aria-label="输入分数">
+            <button type="button" id="gradeBtn">判断等级</button>
+          </div>
+          <div class="result" id="gradeResult" aria-live="polite"></div>
+        </article>
+
+        <article class="demo-card">
+          <div class="demo-title">
+            <h3>switch</h3>
+            <span class="demo-badge">多分支</span>
+          </div>
+          <p class="demo-desc">选择星期几，程序通过 switch 匹配对应的安排。</p>
+          <pre><code>switch (day) {
+  case 1:
+    plan = "整理本周计划";
+    break;
+  case 2:
+    plan = "阅读与笔记";
+    break;
+  default:
+    plan = "自由安排";
+}</code></pre>
+          <div class="field-row">
+            <select id="weekdaySelect" aria-label="选择星期">
+              <option value="1">星期一</option>
+              <option value="2">星期二</option>
+              <option value="3">星期三</option>
+              <option value="4">星期四</option>
+              <option value="5">星期五</option>
+              <option value="6">星期六</option>
+              <option value="7">星期日</option>
+            </select>
+          </div>
+          <div class="result" id="weekdayResult" aria-live="polite"></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="section-num">03</span>
+        <h2>循环语句</h2>
+      </div>
+      <div class="demo-grid">
+        <article class="demo-card">
+          <div class="demo-title">
+            <h3>for 循环</h3>
+            <span class="demo-badge">已知次数</span>
+          </div>
+          <p class="demo-desc">适合已知循环次数的场景，点击按钮重新生成 1 到 10。</p>
+          <pre><code>for (let i = 1; i &lt;= 10; i++) {
+  output.push(i);
+}</code></pre>
+          <div class="field-row">
+            <button type="button" id="forBtn">重新生成</button>
+          </div>
+          <div class="result" id="forResult" aria-live="polite"></div>
+        </article>
+
+        <article class="demo-card">
+          <div class="demo-title">
+            <h3>while 循环</h3>
+            <span class="demo-badge">条件循环</span>
+          </div>
+          <p class="demo-desc">当条件为真时持续执行，这里做一个 5 秒倒计时。</p>
+          <pre><code>while (countdown &gt; 0) {
+  output.push(countdown);
+  countdown--;
+}</code></pre>
+          <div class="field-row">
+            <button type="button" id="countdownBtn">开始倒计时</button>
+          </div>
+          <div class="countdown-value" id="countdownValue" aria-live="polite">5</div>
+        </article>
+
+        <article class="demo-card">
+          <div class="demo-title">
+            <h3>do...while 循环</h3>
+            <span class="demo-badge">至少执行一次</span>
+          </div>
+          <p class="demo-desc">先执行循环体，再判断条件，因此至少执行一次。这里计算各位数字之和。</p>
+          <pre><code>do {
+  sum += n % 10;
+  n = Math.floor(n / 10);
+} while (n &gt; 0);</code></pre>
+          <div class="field-row">
+            <input type="number" id="numberInput" value="123" aria-label="输入一个数字">
+            <button type="button" id="sumBtn">计算数位和</button>
+          </div>
+          <div class="result" id="sumResult" aria-live="polite"></div>
+        </article>
+
+        <article class="demo-card">
+          <div class="demo-title">
+            <h3>break 与 continue</h3>
+            <span class="demo-badge">循环控制</span>
+          </div>
+          <p class="demo-desc">遇到 3 的倍数用 continue 跳过，到达 15 时用 break 结束循环。</p>
+          <pre><code>for (let i = 1; i &lt;= 20; i++) {
+  if (i % 3 === 0) continue;
+  if (i === 15) break;
+}</code></pre>
+          <div class="result" id="flowResult" aria-live="polite"></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="section-num">04</span>
+        <h2>综合练习：FizzBuzz</h2>
+      </div>
+      <div class="demo-grid">
+        <article class="demo-card wide">
+          <div class="demo-title">
+            <h3>条件与循环的组合</h3>
+            <span class="demo-badge">1 ~ 30</span>
+          </div>
+          <p class="demo-desc">遍历 1 到 30：3 的倍数输出 Fizz，5 的倍数输出 Buzz，同时是 3 和 5 的倍数输出 FizzBuzz，其余输出数字本身。</p>
+          <pre><code>if (i % 15 === 0) label = "FizzBuzz";
+else if (i % 3 === 0) label = "Fizz";
+else if (i % 5 === 0) label = "Buzz";
+else label = i;</code></pre>
+          <div class="fizzbuzz-output" id="fizzbuzzOutput" aria-live="polite"></div>
+        </article>
+      </div>
+    </section>
+
+    <footer class="page-footer"><span>24001010631 药恩祈</span></footer>
+  </div>
+
+  <script>
+    (function () {
+      var scoreInput = document.getElementById("scoreInput");
+      var gradeBtn = document.getElementById("gradeBtn");
+      var gradeResult = document.getElementById("gradeResult");
+
+      function gradeOf(score) {
+        if (score >= 90) {
+          return { text: "优秀", className: "good" };
+        } else if (score >= 80) {
+          return { text: "良好", className: "good" };
+        } else if (score >= 70) {
+          return { text: "中等", className: "warn" };
+        } else if (score >= 60) {
+          return { text: "及格", className: "warn" };
+        } else {
+          return { text: "不及格", className: "bad" };
+        }
+      }
+
+      function judgeGrade() {
+        var score = Number(scoreInput.value);
+
+        if (scoreInput.value === "" || Number.isNaN(score) || score < 0 || score > 100) {
+          gradeResult.innerHTML = '<span class="bad">请输入 0 到 100 之间的分数</span>';
+          return;
+        }
+
+        var result = gradeOf(score);
+        gradeResult.innerHTML = '分数 <strong>' + score + '</strong> 的等级是 ' +
+          '<span class="' + result.className + '">' + result.text + '</span>';
+      }
+
+      gradeBtn.addEventListener("click", judgeGrade);
+      scoreInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+          judgeGrade();
+        }
+      });
+
+      var weekdaySelect = document.getElementById("weekdaySelect");
+      var weekdayResult = document.getElementById("weekdayResult");
+
+      function planOf(day) {
+        switch (day) {
+          case 1:
+            return "整理本周计划";
+          case 2:
+            return "阅读与笔记";
+          case 3:
+            return "前端练习";
+          case 4:
+            return "项目复盘";
+          case 5:
+            return "总结与整理";
+          case 6:
+            return "自由创作";
+          case 7:
+            return "休息与运动";
+          default:
+            return "未安排";
+        }
+      }
+
+      function showWeekday() {
+        var day = Number(weekdaySelect.value);
+        var dayNames = ["日", "一", "二", "三", "四", "五", "六"];
+        weekdayResult.innerHTML = "星期" + dayNames[day % 7] +
+          "：<strong>" + planOf(day) + "</strong>";
+      }
+
+      weekdaySelect.addEventListener("change", showWeekday);
+
+      var forBtn = document.getElementById("forBtn");
+      var forResult = document.getElementById("forResult");
+
+      function renderFor() {
+        var fragment = document.createDocumentFragment();
+
+        for (var i = 1; i <= 10; i++) {
+          var chip = document.createElement("span");
+          chip.className = "chip";
+          chip.textContent = i;
+          fragment.appendChild(chip);
+        }
+
+        forResult.innerHTML = "";
+        forResult.appendChild(fragment);
+      }
+
+      forBtn.addEventListener("click", renderFor);
+
+      var countdownBtn = document.getElementById("countdownBtn");
+      var countdownValue = document.getElementById("countdownValue");
+      var countdownTimer = null;
+
+      function startCountdown() {
+        if (countdownTimer !== null) {
+          clearInterval(countdownTimer);
+        }
+
+        var countdown = 5;
+        countdownValue.classList.remove("done");
+        countdownValue.textContent = countdown;
+
+        countdownTimer = setInterval(function () {
+          countdown--;
+
+          if (countdown > 0) {
+            countdownValue.textContent = countdown;
+          } else {
+            clearInterval(countdownTimer);
+            countdownTimer = null;
+            countdownValue.textContent = "发射！";
+            countdownValue.classList.add("done");
+          }
+        }, 700);
+      }
+
+      countdownBtn.addEventListener("click", startCountdown);
+
+      var numberInput = document.getElementById("numberInput");
+      var sumBtn = document.getElementById("sumBtn");
+      var sumResult = document.getElementById("sumResult");
+
+      function calculateDigitSum() {
+        var value = Number(numberInput.value);
+
+        if (numberInput.value === "" || Number.isNaN(value)) {
+          sumResult.innerHTML = '<span class="bad">请输入一个有效数字</span>';
+          return;
+        }
+
+        var n = Math.abs(Math.trunc(value));
+        var sum = 0;
+        var digits = [];
+
+        do {
+          var digit = n % 10;
+          sum += digit;
+          digits.push(digit);
+          n = Math.floor(n / 10);
+        } while (n > 0);
+
+        sumResult.innerHTML = "数位：" + digits.reverse().join(" + ") +
+          " = <strong>" + sum + "</strong>";
+      }
+
+      sumBtn.addEventListener("click", calculateDigitSum);
+      numberInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+          calculateDigitSum();
+        }
+      });
+
+      var flowResult = document.getElementById("flowResult");
+
+      function renderFlow() {
+        var fragment = document.createDocumentFragment();
+
+        for (var i = 1; i <= 20; i++) {
+          if (i === 15) {
+            var stopChip = document.createElement("span");
+            stopChip.className = "chip stop";
+            stopChip.textContent = "break (i = 15)";
+            fragment.appendChild(stopChip);
+            break;
+          }
+
+          if (i % 3 === 0) {
+            var skipChip = document.createElement("span");
+            skipChip.className = "chip skip";
+            skipChip.textContent = i;
+            fragment.appendChild(skipChip);
+            continue;
+          }
+
+          var chip = document.createElement("span");
+          chip.className = "chip";
+          chip.textContent = i;
+          fragment.appendChild(chip);
+        }
+
+        flowResult.appendChild(fragment);
+      }
+
+      var fizzbuzzOutput = document.getElementById("fizzbuzzOutput");
+
+      function renderFizzBuzz() {
+        var fragment = document.createDocumentFragment();
+
+        for (var i = 1; i <= 30; i++) {
+          var label = "";
+          var className = "chip";
+
+          if (i % 15 === 0) {
+            label = "FizzBuzz";
+            className += " fizzbuzz";
+          } else if (i % 3 === 0) {
+            label = "Fizz";
+            className += " fizz";
+          } else if (i % 5 === 0) {
+            label = "Buzz";
+            className += " buzz";
+          } else {
+            label = i;
+          }
+
+          var chip = document.createElement("span");
+          chip.className = className;
+          chip.textContent = label;
+          fragment.appendChild(chip);
+        }
+
+        fizzbuzzOutput.appendChild(fragment);
+      }
+
+      judgeGrade();
+      showWeekday();
+      renderFor();
+      calculateDigitSum();
+      renderFlow();
+      renderFizzBuzz();
+    })();
+  </script>
+</body>
+</html>
