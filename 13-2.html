@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>13-2 Lucide SVG 图标</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      background: linear-gradient(135deg, #f1fbfa, #eef6ff);
+      color: #23414a;
+      line-height: 1.6;
+      padding: 40px 20px;
+    }
+
+    .container {
+      width: min(100%, 1080px);
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    h1 {
+      font-size: 32px;
+      color: #134e4a;
+      margin-bottom: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    h1 svg {
+      width: 34px;
+      height: 34px;
+      color: #0d9488;
+      stroke-width: 2;
+    }
+
+    .subtitle {
+      color: #5f7d85;
+      font-size: 15px;
+    }
+
+    .tip {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 10px 18px;
+      background: #fff;
+      border: 1px solid #cde9e5;
+      border-radius: 999px;
+      font-size: 13px;
+      color: #476a72;
+      box-shadow: 0 2px 8px rgba(13, 148, 136, 0.07);
+    }
+
+    .tip code {
+      font-family: Consolas, monospace;
+      color: #0f766e;
+      background: #e6f7f4;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    section {
+      background: #fff;
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(19, 78, 74, 0.07);
+    }
+
+    h2 {
+      font-size: 19px;
+      color: #134e4a;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h2::before {
+      content: "";
+      width: 4px;
+      height: 20px;
+      background: linear-gradient(#0d9488, #2dd4bf);
+      border-radius: 2px;
+    }
+
+    h2 small {
+      font-size: 12px;
+      font-weight: normal;
+      color: #8aa6ab;
+      margin-left: auto;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 14px;
+    }
+
+    .icon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 18px 8px;
+      border: 1px solid #e3f1ef;
+      border-radius: 10px;
+      background: #fbfefe;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+
+    .icon-item:hover {
+      transform: translateY(-4px);
+      border-color: #a7ded7;
+      box-shadow: 0 10px 18px rgba(13, 148, 136, 0.14);
+    }
+
+    .icon-item svg {
+      width: 28px;
+      height: 28px;
+      color: #0d9488;
+      stroke-width: 1.8;
+      transition: color 0.25s ease, transform 0.25s ease;
+    }
+
+    .icon-item:hover svg {
+      color: #0f766e;
+      transform: scale(1.15);
+    }
+
+    .icon-item span {
+      font-size: 12px;
+      color: #5f7d85;
+      text-align: center;
+      word-break: break-word;
+    }
+
+    .size-row {
+      display: flex;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 28px;
+      padding: 10px 6px 4px;
+    }
+
+    .size-row div {
+      text-align: center;
+      color: #5f7d85;
+      font-size: 12px;
+    }
+
+    .size-row svg {
+      display: block;
+      margin: 0 auto 8px;
+      color: #0d9488;
+      stroke-width: 1.8;
+    }
+
+    .s16 svg { width: 16px; height: 16px; }
+    .s20 svg { width: 20px; height: 20px; }
+    .s24 svg { width: 24px; height: 24px; }
+    .s32 svg { width: 32px; height: 32px; }
+    .s40 svg { width: 40px; height: 40px; }
+    .s56 svg { width: 56px; height: 56px; }
+
+    .stroke-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+
+    .stroke-box {
+      flex: 1 1 150px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 22px 12px;
+      border-radius: 10px;
+      background: linear-gradient(160deg, #f9fefe, #eaf8f6);
+      border: 1px solid #e3f1ef;
+      font-size: 12px;
+      color: #5f7d85;
+    }
+
+    .stroke-box svg {
+      width: 34px;
+      height: 34px;
+      color: #0d9488;
+    }
+
+    .sw1 svg { stroke-width: 1; }
+    .sw1-5 svg { stroke-width: 1.5; }
+    .sw2 svg { stroke-width: 2; }
+    .sw3 svg { stroke-width: 3; }
+
+    .colors {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .color-box {
+      flex: 1 1 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 18px;
+      border-radius: 10px;
+      background: #fbfefe;
+      border: 1px solid #e3f1ef;
+      font-size: 12px;
+      color: #5f7d85;
+    }
+
+    .color-box svg {
+      width: 26px;
+      height: 26px;
+      stroke-width: 1.8;
+    }
+
+    .c1 svg { color: #ef4444; }
+    .c2 svg { color: #f59e0b; }
+    .c3 svg { color: #10b981; }
+    .c4 svg { color: #3b82f6; }
+    .c5 svg { color: #8b5cf6; }
+
+    .animation-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+
+    .anim-box {
+      flex: 1 1 150px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 22px 12px;
+      border-radius: 10px;
+      background: linear-gradient(160deg, #f9fefe, #eaf8f6);
+      border: 1px solid #e3f1ef;
+      font-size: 12px;
+      color: #5f7d85;
+    }
+
+    .anim-box svg {
+      width: 30px;
+      height: 30px;
+      color: #0d9488;
+      stroke-width: 1.8;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .anim-spin svg { animation: spin 2s linear infinite; }
+    .anim-pulse svg { animation: pulse 1.2s ease-in-out infinite; }
+    .anim-float svg { animation: float 1.6s ease-in-out infinite; }
+
+    .brands svg {
+      color: #476a72;
+    }
+
+    .brands .icon-item:hover svg {
+      color: #134e4a;
+    }
+
+    .control {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding: 18px;
+      margin-top: 18px;
+      border-radius: 10px;
+      background: #f9fefe;
+      border: 1px solid #e3f1ef;
+    }
+
+    .control .preview {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .control .preview svg {
+      width: 48px;
+      height: 48px;
+      color: #0d9488;
+      transition: width 0.2s ease, height 0.2s ease;
+    }
+
+    .control label {
+      font-size: 13px;
+      color: #5f7d85;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .control input[type="range"] {
+      accent-color: #0d9488;
+      width: 140px;
+    }
+
+    footer {
+      text-align: center;
+      color: #91a9ad;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 24px 14px;
+      }
+
+      h1 {
+        font-size: 25px;
+      }
+
+      .grid {
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><i data-lucide="shapes"></i>Lucide SVG 图标</h1>
+      <p class="subtitle">由 JavaScript 将占位元素替换为内联 SVG，可自由控制描边与颜色</p>
+      <p class="tip">用法：<code>&lt;i data-lucide="house"&gt;&lt;/i&gt;</code> + <code>lucide.createIcons()</code></p>
+    </header>
+
+    <section>
+      <h2>常用图标 <small>data-lucide</small></h2>
+      <div class="grid">
+        <div class="icon-item"><i data-lucide="house"></i><span>house</span></div>
+        <div class="icon-item"><i data-lucide="user"></i><span>user</span></div>
+        <div class="icon-item"><i data-lucide="settings"></i><span>settings</span></div>
+        <div class="icon-item"><i data-lucide="search"></i><span>search</span></div>
+        <div class="icon-item"><i data-lucide="heart"></i><span>heart</span></div>
+        <div class="icon-item"><i data-lucide="star"></i><span>star</span></div>
+        <div class="icon-item"><i data-lucide="bell"></i><span>bell</span></div>
+        <div class="icon-item"><i data-lucide="mail"></i><span>mail</span></div>
+        <div class="icon-item"><i data-lucide="calendar"></i><span>calendar</span></div>
+        <div class="icon-item"><i data-lucide="camera"></i><span>camera</span></div>
+        <div class="icon-item"><i data-lucide="image"></i><span>image</span></div>
+        <div class="icon-item"><i data-lucide="music"></i><span>music</span></div>
+        <div class="icon-item"><i data-lucide="download"></i><span>download</span></div>
+        <div class="icon-item"><i data-lucide="upload"></i><span>upload</span></div>
+        <div class="icon-item"><i data-lucide="trash-2"></i><span>trash-2</span></div>
+        <div class="icon-item"><i data-lucide="pencil"></i><span>pencil</span></div>
+        <div class="icon-item"><i data-lucide="circle-check"></i><span>circle-check</span></div>
+        <div class="icon-item"><i data-lucide="map-pin"></i><span>map-pin</span></div>
+        <div class="icon-item"><i data-lucide="shopping-cart"></i><span>shopping-cart</span></div>
+        <div class="icon-item"><i data-lucide="credit-card"></i><span>credit-card</span></div>
+        <div class="icon-item"><i data-lucide="message-circle"></i><span>message-circle</span></div>
+        <div class="icon-item"><i data-lucide="send"></i><span>send</span></div>
+        <div class="icon-item"><i data-lucide="lock"></i><span>lock</span></div>
+        <div class="icon-item"><i data-lucide="shield"></i><span>shield</span></div>
+        <div class="icon-item"><i data-lucide="folder"></i><span>folder</span></div>
+        <div class="icon-item"><i data-lucide="file-text"></i><span>file-text</span></div>
+        <div class="icon-item"><i data-lucide="clock"></i><span>clock</span></div>
+        <div class="icon-item"><i data-lucide="sun"></i><span>sun</span></div>
+        <div class="icon-item"><i data-lucide="moon"></i><span>moon</span></div>
+        <div class="icon-item"><i data-lucide="cloud"></i><span>cloud</span></div>
+        <div class="icon-item"><i data-lucide="wifi"></i><span>wifi</span></div>
+        <div class="icon-item"><i data-lucide="smartphone"></i><span>smartphone</span></div>
+        <div class="icon-item"><i data-lucide="laptop"></i><span>laptop</span></div>
+        <div class="icon-item"><i data-lucide="monitor"></i><span>monitor</span></div>
+        <div class="icon-item"><i data-lucide="printer"></i><span>printer</span></div>
+        <div class="icon-item"><i data-lucide="key"></i><span>key</span></div>
+        <div class="icon-item"><i data-lucide="phone"></i><span>phone</span></div>
+        <div class="icon-item"><i data-lucide="gift"></i><span>gift</span></div>
+        <div class="icon-item"><i data-lucide="coffee"></i><span>coffee</span></div>
+        <div class="icon-item"><i data-lucide="smile"></i><span>smile</span></div>
+        <div class="icon-item"><i data-lucide="thumbs-up"></i><span>thumbs-up</span></div>
+        <div class="icon-item"><i data-lucide="globe"></i><span>globe</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>品牌图标 <small>brands</small></h2>
+      <div class="grid brands">
+        <div class="icon-item"><i data-lucide="github"></i><span>github</span></div>
+        <div class="icon-item"><i data-lucide="twitter"></i><span>twitter</span></div>
+        <div class="icon-item"><i data-lucide="facebook"></i><span>facebook</span></div>
+        <div class="icon-item"><i data-lucide="instagram"></i><span>instagram</span></div>
+        <div class="icon-item"><i data-lucide="linkedin"></i><span>linkedin</span></div>
+        <div class="icon-item"><i data-lucide="youtube"></i><span>youtube</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>尺寸与描边粗细</h2>
+      <div class="size-row">
+        <div class="s16"><i data-lucide="star"></i>16px</div>
+        <div class="s20"><i data-lucide="star"></i>20px</div>
+        <div class="s24"><i data-lucide="star"></i>24px</div>
+        <div class="s32"><i data-lucide="star"></i>32px</div>
+        <div class="s40"><i data-lucide="star"></i>40px</div>
+        <div class="s56"><i data-lucide="star"></i>56px</div>
+      </div>
+      <div class="stroke-row" style="margin-top: 22px;">
+        <div class="stroke-box sw1"><i data-lucide="heart"></i>stroke-width: 1</div>
+        <div class="stroke-box sw1-5"><i data-lucide="heart"></i>stroke-width: 1.5</div>
+        <div class="stroke-box sw2"><i data-lucide="heart"></i>stroke-width: 2</div>
+        <div class="stroke-box sw3"><i data-lucide="heart"></i>stroke-width: 3</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>颜色</h2>
+      <div class="colors">
+        <div class="color-box c1"><i data-lucide="heart"></i>红色</div>
+        <div class="color-box c2"><i data-lucide="star"></i>橙色</div>
+        <div class="color-box c3"><i data-lucide="leaf"></i>绿色</div>
+        <div class="color-box c4"><i data-lucide="droplet"></i>蓝色</div>
+        <div class="color-box c5"><i data-lucide="crown"></i>紫色</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>动画效果 <small>对 SVG 使用 CSS 动画</small></h2>
+      <div class="animation-row">
+        <div class="anim-box anim-spin"><i data-lucide="loader-circle"></i>旋转</div>
+        <div class="anim-box anim-pulse"><i data-lucide="heart"></i>心跳</div>
+        <div class="anim-box anim-float"><i data-lucide="cloud"></i>漂浮</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>动态控制 <small>SVG 可通过 CSS 实时调整</small></h2>
+      <div class="control">
+        <div class="preview">
+          <i data-lucide="settings" id="previewIcon"></i>
+        </div>
+        <label>
+          大小
+          <input type="range" id="sizeRange" min="24" max="96" value="48" />
+          <span id="sizeValue">48px</span>
+        </label>
+        <label>
+          描边
+          <input type="range" id="strokeRange" min="1" max="4" step="0.5" value="2" />
+          <span id="strokeValue">2</span>
+        </label>
+      </div>
+    </section>
+
+    <footer>Lucide 0.468.0 · 本地 cdn/lucide 资源</footer>
+  </div>
+
+  <script src="cdn/lucide/lucide.min.js"></script>
+  <script>
+    lucide.createIcons();
+
+    var previewIcon = document.getElementById("previewIcon");
+    var sizeRange = document.getElementById("sizeRange");
+    var sizeValue = document.getElementById("sizeValue");
+    var strokeRange = document.getElementById("strokeRange");
+    var strokeValue = document.getElementById("strokeValue");
+
+    sizeRange.addEventListener("input", function () {
+      previewIcon.style.width = this.value + "px";
+      previewIcon.style.height = this.value + "px";
+      sizeValue.textContent = this.value + "px";
+    });
+
+    strokeRange.addEventListener("input", function () {
+      previewIcon.style.strokeWidth = this.value;
+      strokeValue.textContent = this.value;
+    });
+  </script>
+</body>
+</html>

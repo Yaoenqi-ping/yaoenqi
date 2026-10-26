@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<!-- 24001010631yaoenqi -->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#f6f9fe" />
+  <title>13-3 移动端底部导航（字体图标）</title>
+  <link rel="stylesheet" href="font/iconfont.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --accent: #2f6fed;
+      --accent-soft: #e9f1ff;
+      --ink: #1f2d3d;
+      --muted: #8a99ad;
+      --line: #e8edf5;
+      --tabbar-height: 62px;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      background: #e9eef6;
+      color: var(--ink);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: linear-gradient(180deg, #f6f9fe 0%, #f3f6fb 42%, #eef2f8 100%);
+      padding: 0 18px calc(var(--tabbar-height) + 34px + env(safe-area-inset-bottom));
+      box-shadow: 0 0 40px rgba(28, 52, 92, 0.08);
+      position: relative;
+    }
+
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 22px 0 16px;
+      background: rgba(246, 249, 254, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .greeting {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+    }
+
+    .app-header h1 {
+      font-size: 23px;
+      color: var(--ink);
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tech-tag {
+      font-size: 10px;
+      font-weight: normal;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border-radius: 999px;
+      padding: 3px 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .header-btn {
+      width: 40px;
+      height: 40px;
+      border: none;
+      border-radius: 14px;
+      background: #fff;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 16px rgba(47, 111, 237, 0.14);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .header-btn:active {
+      transform: scale(0.92);
+    }
+
+    .header-btn .iconfont {
+      font-size: 20px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 22px 20px;
+      border-radius: 20px;
+      color: #fff;
+      background: linear-gradient(130deg, #2f6fed, #5b9bff);
+      box-shadow: 0 14px 28px rgba(47, 111, 237, 0.24);
+      margin-bottom: 26px;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 150px;
+      height: 150px;
+      right: -46px;
+      top: -58px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 90px;
+      height: 90px;
+      right: 26px;
+      bottom: -50px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .hero h2 {
+      font-size: 20px;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .hero p {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.82);
+      margin-bottom: 18px;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 26px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-stats strong {
+      display: block;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+
+    .hero-stats span {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .section-head h2 {
+      font-size: 16px;
+      letter-spacing: 0.5px;
+    }
+
+    .section-head a {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .section-head .iconfont {
+      font-size: 14px;
+    }
+
+    .note-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .note-card {
+      display: flex;
+      gap: 13px;
+      padding: 15px;
+      border-radius: 16px;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: 0 4px 14px rgba(31, 45, 61, 0.04);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .note-card:active {
+      transform: scale(0.985);
+      box-shadow: 0 2px 8px rgba(31, 45, 61, 0.05);
+    }
+
+    .note-icon {
+      flex: 0 0 42px;
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .note-icon .iconfont {
+      font-size: 21px;
+    }
+
+    .note-card:nth-child(2) .note-icon {
+      background: #fff3e6;
+      color: #e8912d;
+    }
+
+    .note-card:nth-child(3) .note-icon {
+      background: #eaf8f1;
+      color: #2fa66f;
+    }
+
+    .note-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .note-body h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .note-body p {
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .note-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+      font-size: 11px;
+      color: #a8b4c4;
+    }
+
+    .tag {
+      color: var(--accent);
+      background: var(--accent-soft);
+      border-radius: 6px;
+      padding: 1px 7px;
+      font-size: 10px;
+    }
+
+    .tabbar {
+      position: fixed;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      z-index: 100;
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      align-items: stretch;
+      padding: 7px 10px calc(7px + env(safe-area-inset-bottom));
+      background: rgba(255, 255, 255, 0.97);
+      border-top: 1px solid var(--line);
+      box-shadow: 0 -8px 24px rgba(28, 52, 92, 0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .tab-item {
+      flex: 1 1 0;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: 3px 0 1px;
+      text-decoration: none;
+      color: #93a1b5;
+      font-size: 11px;
+      -webkit-tap-highlight-color: transparent;
+      transition: color 0.2s ease;
+    }
+
+    .tab-icon-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 28px;
+      border-radius: 10px;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .tab-icon {
+      font-size: 23px;
+      line-height: 1;
+      transition: transform 0.2s ease;
+    }
+
+    .tab-label {
+      line-height: 1.4;
+      transition: font-weight 0.2s ease;
+    }
+
+    .tab-item.active {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .tab-item.active .tab-icon-wrap {
+      background: var(--accent-soft);
+    }
+
+    .tab-item.active .tab-icon {
+      transform: translateY(-1px);
+    }
+
+    .tab-item:not(.active):active .tab-icon-wrap {
+      background: #f1f4f9;
+    }
+
+    .badge {
+      position: absolute;
+      top: -5px;
+      right: -7px;
+      min-width: 17px;
+      height: 17px;
+      padding: 0 4px;
+      border-radius: 9px;
+      background: #ff3b30;
+      border: 2px solid #fff;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 13px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(255, 59, 48, 0.35);
+    }
+
+    .dot {
+      position: absolute;
+      top: -1px;
+      right: -3px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ff3b30;
+      border: 2px solid #fff;
+      box-shadow: 0 1px 4px rgba(255, 59, 48, 0.4);
+    }
+
+    @media (max-width: 360px) {
+      .app {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .tab-item {
+        font-size: 10px;
+      }
+
+      .tab-icon {
+        font-size: 21px;
+      }
+
+      .tab-icon-wrap {
+        width: 38px;
+      }
+    }
+
+    @media (min-width: 481px) {
+      body {
+        padding: 24px 0;
+      }
+
+      .app {
+        min-height: calc(100vh - 48px);
+        border-radius: 26px;
+        overflow: hidden;
+      }
+
+      .tabbar {
+        bottom: 24px;
+        border-radius: 18px;
+        border: 1px solid var(--line);
+        box-shadow: 0 10px 30px rgba(28, 52, 92, 0.16);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div>
+        <p class="greeting" id="greeting">下午好，欢迎回来</p>
+        <h1><span id="pageTitle">首页</span><span class="tech-tag">字体图标</span></h1>
+      </div>
+      <button class="header-btn" type="button" aria-label="新建笔记">
+        <i class="iconfont icon-zengjia"></i>
+      </button>
+    </header>
+
+    <section class="hero">
+      <h2>把灵感留在今天</h2>
+      <p>你已经坚持记录 12 天，继续保持</p>
+      <div class="hero-stats">
+        <div><strong>28</strong><span>全部笔记</span></div>
+        <div><strong>6</strong><span>待整理</span></div>
+        <div><strong>12</strong><span>连续天数</span></div>
+      </div>
+    </section>
+
+    <div class="section-head">
+      <h2>最近笔记</h2>
+      <a href="#" aria-label="查看全部笔记">查看全部<i class="iconfont icon-gengduo"></i></a>
+    </div>
+
+    <div class="note-list">
+      <article class="note-card">
+        <div class="note-icon"><i class="iconfont icon-a-bijibenbiji"></i></div>
+        <div class="note-body">
+          <h3>移动端底部导航设计</h3>
+          <p>固定定位配合 flex 自适应宽度，适配安全区域</p>
+          <div class="note-meta"><span>今天 10:24</span><span class="tag">设计</span></div>
+        </div>
+      </article>
+      <article class="note-card">
+        <div class="note-icon"><i class="iconfont icon-bianji"></i></div>
+        <div class="note-body">
+          <h3>字体图标的使用笔记</h3>
+          <p>通过 @font-face 引入 iconfont，用 class 调用图标</p>
+          <div class="note-meta"><span>昨天 21:08</span><span class="tag">前端</span></div>
+        </div>
+      </article>
+      <article class="note-card">
+        <div class="note-icon"><i class="iconfont icon-shoucang"></i></div>
+        <div class="note-body">
+          <h3>值得收藏的配色方案</h3>
+          <p>蓝色系搭配留白，让移动端界面更清爽</p>
+          <div class="note-meta"><span>10 月 17 日</span><span class="tag">灵感</span></div>
+        </div>
+      </article>
+    </div>
+
+    <nav class="tabbar" aria-label="底部导航">
+      <a class="tab-item active" href="#" data-title="首页" aria-current="page">
+        <span class="tab-icon-wrap">
+          <!-- 修改：替换为网易云图标class -->
+          <i class="iconfont tab-icon icon-wangyiyun11" aria-hidden="true"></i>
+        </span>
+        <span class="tab-label">首页</span>
+      </a>
+      <a class="tab-item" href="#" data-title="漫游">
+        <span class="tab-icon-wrap">
+          <i class="iconfont icon-wuqiong tab-icon" aria-hidden="true"></i>
+          <span class="dot" aria-label="有新内容"></span>
+        </span>
+        <span class="tab-label">漫游</span>
+      </a>
+      <a class="tab-item" href="#" data-title="笔记">
+        <span class="tab-icon-wrap">
+          <i class="iconfont icon-bijijilu tab-icon" aria-hidden="true"></i>
+          <span class="badge" aria-label="6 条未读">6</span>
+        </span>
+        <span class="tab-label">笔记</span>
+      </a>
+      <a class="tab-item" href="#" data-title="我的">
+        <span class="tab-icon-wrap">
+          <i class="iconfont icon-wode tab-icon" aria-hidden="true"></i>
+        </span>
+        <span class="tab-label">我的</span>
+      </a>
+    </nav>
+  </div>
+
+  <script>
+    (function () {
+      var tabs = document.querySelectorAll(".tab-item");
+      var pageTitle = document.getElementById("pageTitle");
+
+      tabs.forEach(function (tab) {
+        tab.addEventListener("click", function (event) {
+          event.preventDefault();
+          tabs.forEach(function (item) {
+            item.classList.remove("active");
+            item.removeAttribute("aria-current");
+          });
+          tab.classList.add("active");
+          tab.setAttribute("aria-current", "page");
+          pageTitle.textContent = tab.getAttribute("data-title");
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

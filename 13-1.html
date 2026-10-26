@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>13-1 Font Awesome 字体图标</title>
+  <link rel="stylesheet" href="cdn/fontawesome/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      background: linear-gradient(135deg, #f3f6fc, #eef4ff);
+      color: #2c3a52;
+      line-height: 1.6;
+      padding: 40px 20px;
+    }
+
+    .container {
+      width: min(100%, 1080px);
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    h1 {
+      font-size: 32px;
+      color: #1f3a68;
+      margin-bottom: 8px;
+    }
+
+    h1 i {
+      color: #3b82f6;
+      margin-right: 8px;
+    }
+
+    .subtitle {
+      color: #6b7c93;
+      font-size: 15px;
+    }
+
+    .tip {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 10px 18px;
+      background: #fff;
+      border: 1px solid #dbe6f6;
+      border-radius: 999px;
+      font-size: 13px;
+      color: #52688a;
+      box-shadow: 0 2px 8px rgba(31, 58, 104, 0.06);
+    }
+
+    .tip code {
+      font-family: Consolas, monospace;
+      color: #2563eb;
+      background: #eef4ff;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    section {
+      background: #fff;
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(31, 58, 104, 0.07);
+    }
+
+    h2 {
+      font-size: 19px;
+      color: #1f3a68;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h2::before {
+      content: "";
+      width: 4px;
+      height: 20px;
+      background: linear-gradient(#3b82f6, #60a5fa);
+      border-radius: 2px;
+    }
+
+    h2 small {
+      font-size: 12px;
+      font-weight: normal;
+      color: #8a9bb5;
+      margin-left: auto;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 14px;
+    }
+
+    .icon-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 18px 8px;
+      border: 1px solid #e8eef8;
+      border-radius: 10px;
+      background: #fbfdff;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+
+    .icon-item:hover {
+      transform: translateY(-4px);
+      border-color: #bcd3f5;
+      box-shadow: 0 10px 18px rgba(59, 130, 246, 0.15);
+    }
+
+    .icon-item i {
+      font-size: 28px;
+      color: #3b82f6;
+      transition: color 0.25s ease, transform 0.25s ease;
+    }
+
+    .icon-item:hover i {
+      color: #1d4ed8;
+      transform: scale(1.15);
+    }
+
+    .icon-item span {
+      font-size: 12px;
+      color: #6b7c93;
+      text-align: center;
+    }
+
+    .size-row {
+      display: flex;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 28px;
+      padding: 10px 6px 4px;
+    }
+
+    .size-row div {
+      text-align: center;
+      color: #6b7c93;
+      font-size: 12px;
+    }
+
+    .size-row i {
+      display: block;
+      color: #3b82f6;
+      margin-bottom: 8px;
+    }
+
+    .animation-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+
+    .anim-box {
+      flex: 1 1 150px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 22px 12px;
+      border-radius: 10px;
+      background: linear-gradient(160deg, #f8fbff, #eef4ff);
+      border: 1px solid #e8eef8;
+      font-size: 12px;
+      color: #6b7c93;
+    }
+
+    .anim-box i {
+      font-size: 30px;
+      color: #3b82f6;
+    }
+
+    .colors {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .color-box {
+      flex: 1 1 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 18px;
+      border-radius: 10px;
+      background: #fbfdff;
+      border: 1px solid #e8eef8;
+      font-size: 12px;
+      color: #6b7c93;
+    }
+
+    .color-box i {
+      font-size: 26px;
+    }
+
+    .c1 { color: #ef4444; }
+    .c2 { color: #f59e0b; }
+    .c3 { color: #10b981; }
+    .c4 { color: #3b82f6; }
+    .c5 { color: #8b5cf6; }
+
+    .brands i {
+      color: #52688a;
+    }
+
+    .brands .icon-item:hover i {
+      color: #1f3a68;
+    }
+
+    footer {
+      text-align: center;
+      color: #96a6bd;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 24px 14px;
+      }
+
+      h1 {
+        font-size: 25px;
+      }
+
+      .grid {
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><i class="fa-solid fa-font-awesome"></i>Font Awesome 字体图标</h1>
+      <p class="subtitle">通过 CSS 引入 Web 字体，再用 class 调用图标</p>
+      <p class="tip">用法：<code>&lt;i class="fa-solid fa-house"&gt;&lt;/i&gt;</code></p>
+    </header>
+
+    <section>
+      <h2>Solid 实心图标 <small>fa-solid</small></h2>
+      <div class="grid">
+        <div class="icon-item"><i class="fa-solid fa-house"></i><span>fa-house</span></div>
+        <div class="icon-item"><i class="fa-solid fa-user"></i><span>fa-user</span></div>
+        <div class="icon-item"><i class="fa-solid fa-gear"></i><span>fa-gear</span></div>
+        <div class="icon-item"><i class="fa-solid fa-magnifying-glass"></i><span>fa-magnifying-glass</span></div>
+        <div class="icon-item"><i class="fa-solid fa-heart"></i><span>fa-heart</span></div>
+        <div class="icon-item"><i class="fa-solid fa-star"></i><span>fa-star</span></div>
+        <div class="icon-item"><i class="fa-solid fa-bell"></i><span>fa-bell</span></div>
+        <div class="icon-item"><i class="fa-solid fa-envelope"></i><span>fa-envelope</span></div>
+        <div class="icon-item"><i class="fa-solid fa-calendar-days"></i><span>fa-calendar-days</span></div>
+        <div class="icon-item"><i class="fa-solid fa-camera"></i><span>fa-camera</span></div>
+        <div class="icon-item"><i class="fa-solid fa-image"></i><span>fa-image</span></div>
+        <div class="icon-item"><i class="fa-solid fa-music"></i><span>fa-music</span></div>
+        <div class="icon-item"><i class="fa-solid fa-download"></i><span>fa-download</span></div>
+        <div class="icon-item"><i class="fa-solid fa-upload"></i><span>fa-upload</span></div>
+        <div class="icon-item"><i class="fa-solid fa-trash-can"></i><span>fa-trash-can</span></div>
+        <div class="icon-item"><i class="fa-solid fa-pen-to-square"></i><span>fa-pen-to-square</span></div>
+        <div class="icon-item"><i class="fa-solid fa-circle-check"></i><span>fa-circle-check</span></div>
+        <div class="icon-item"><i class="fa-solid fa-location-dot"></i><span>fa-location-dot</span></div>
+        <div class="icon-item"><i class="fa-solid fa-cart-shopping"></i><span>fa-cart-shopping</span></div>
+        <div class="icon-item"><i class="fa-solid fa-credit-card"></i><span>fa-credit-card</span></div>
+        <div class="icon-item"><i class="fa-solid fa-comment-dots"></i><span>fa-comment-dots</span></div>
+        <div class="icon-item"><i class="fa-solid fa-paper-plane"></i><span>fa-paper-plane</span></div>
+        <div class="icon-item"><i class="fa-solid fa-lock"></i><span>fa-lock</span></div>
+        <div class="icon-item"><i class="fa-solid fa-shield-halved"></i><span>fa-shield-halved</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Regular 描边图标 <small>fa-regular</small></h2>
+      <div class="grid">
+        <div class="icon-item"><i class="fa-regular fa-heart"></i><span>fa-heart</span></div>
+        <div class="icon-item"><i class="fa-regular fa-star"></i><span>fa-star</span></div>
+        <div class="icon-item"><i class="fa-regular fa-user"></i><span>fa-user</span></div>
+        <div class="icon-item"><i class="fa-regular fa-envelope"></i><span>fa-envelope</span></div>
+        <div class="icon-item"><i class="fa-regular fa-calendar"></i><span>fa-calendar</span></div>
+        <div class="icon-item"><i class="fa-regular fa-clock"></i><span>fa-clock</span></div>
+        <div class="icon-item"><i class="fa-regular fa-comment"></i><span>fa-comment</span></div>
+        <div class="icon-item"><i class="fa-regular fa-folder"></i><span>fa-folder</span></div>
+        <div class="icon-item"><i class="fa-regular fa-file"></i><span>fa-file</span></div>
+        <div class="icon-item"><i class="fa-regular fa-bell"></i><span>fa-bell</span></div>
+        <div class="icon-item"><i class="fa-regular fa-image"></i><span>fa-image</span></div>
+        <div class="icon-item"><i class="fa-regular fa-circle-check"></i><span>fa-circle-check</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>品牌图标 <small>fa-brands</small></h2>
+      <div class="grid brands">
+        <div class="icon-item"><i class="fa-brands fa-github"></i><span>fa-github</span></div>
+        <div class="icon-item"><i class="fa-brands fa-weixin"></i><span>fa-weixin</span></div>
+        <div class="icon-item"><i class="fa-brands fa-qq"></i><span>fa-qq</span></div>
+        <div class="icon-item"><i class="fa-brands fa-bilibili"></i><span>fa-bilibili</span></div>
+        <div class="icon-item"><i class="fa-brands fa-html5"></i><span>fa-html5</span></div>
+        <div class="icon-item"><i class="fa-brands fa-css3-alt"></i><span>fa-css3-alt</span></div>
+        <div class="icon-item"><i class="fa-brands fa-js"></i><span>fa-js</span></div>
+        <div class="icon-item"><i class="fa-brands fa-vuejs"></i><span>fa-vuejs</span></div>
+        <div class="icon-item"><i class="fa-brands fa-react"></i><span>fa-react</span></div>
+        <div class="icon-item"><i class="fa-brands fa-node-js"></i><span>fa-node-js</span></div>
+        <div class="icon-item"><i class="fa-brands fa-figma"></i><span>fa-figma</span></div>
+        <div class="icon-item"><i class="fa-brands fa-chrome"></i><span>fa-chrome</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>尺寸与颜色</h2>
+      <div class="size-row">
+        <div><i class="fa-solid fa-star fa-xs"></i>fa-xs</div>
+        <div><i class="fa-solid fa-star fa-sm"></i>fa-sm</div>
+        <div><i class="fa-solid fa-star fa-lg"></i>fa-lg</div>
+        <div><i class="fa-solid fa-star fa-2x"></i>fa-2x</div>
+        <div><i class="fa-solid fa-star fa-3x"></i>fa-3x</div>
+        <div><i class="fa-solid fa-star fa-4x"></i>fa-4x</div>
+      </div>
+      <div class="colors" style="margin-top: 20px;">
+        <div class="color-box"><i class="fa-solid fa-heart c1"></i>c1</div>
+        <div class="color-box"><i class="fa-solid fa-star c2"></i>c2</div>
+        <div class="color-box"><i class="fa-solid fa-leaf c3"></i>c3</div>
+        <div class="color-box"><i class="fa-solid fa-droplet c4"></i>c4</div>
+        <div class="color-box"><i class="fa-solid fa-crown c5"></i>c5</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>动画效果 <small>fa-spin · fa-beat · fa-fade · fa-bounce</small></h2>
+      <div class="animation-row">
+        <div class="anim-box"><i class="fa-solid fa-spinner fa-spin"></i>fa-spin</div>
+        <div class="anim-box"><i class="fa-solid fa-heart fa-beat"></i>fa-beat</div>
+        <div class="anim-box"><i class="fa-solid fa-bell fa-fade"></i>fa-fade</div>
+        <div class="anim-box"><i class="fa-solid fa-basketball fa-bounce"></i>fa-bounce</div>
+      </div>
+    </section>
+
+    <footer>Font Awesome 6.5.2 · 本地 cdn/fontawesome 资源</footer>
+  </div>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<!--
+  作者：药恩祈
+  建立时间：2026-10-26 13:39
+  使用大模型：deepseek/deepseek-flash
+  功能名称：逢七过（100 个盒子）
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="24001010631 药恩祈">
+  <title>15-1 逢七过</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      min-height: 100vh;
+      padding: 40px 20px 60px;
+      background: linear-gradient(160deg, #eef4ff 0%, #f7f0ff 100%);
+      color: #2b2f45;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .screen {
+      width: 100%;
+      max-width: 780px;
+    }
+
+    .screen-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .screen-header h1 {
+      font-size: 30px;
+      letter-spacing: 3px;
+      color: #3d4a8a;
+      margin-bottom: 8px;
+    }
+
+    .screen-header p {
+      font-size: 14px;
+      color: #7a83a8;
+      line-height: 1.8;
+    }
+
+    .screen-header p strong {
+      color: #6b5bd2;
+      font-weight: 600;
+    }
+
+    .summary {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 20px 0 26px;
+    }
+
+    .summary-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: #fff;
+      box-shadow: 0 6px 16px rgba(61, 74, 138, 0.08);
+      font-size: 13px;
+      color: #5c6488;
+    }
+
+    .summary-item b {
+      color: #6b5bd2;
+      font-size: 16px;
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 4px;
+    }
+
+    .legend-dot.filled {
+      background: linear-gradient(135deg, #6b8cff, #8b6bff);
+    }
+
+    .legend-dot.empty {
+      border: 1.5px dashed #b9b4d8;
+      background: #f6f4ff;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 10px;
+    }
+
+    .box {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      font-size: clamp(12px, 2.6vw, 18px);
+      font-weight: 600;
+      user-select: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .box.filled {
+      background: #fff;
+      color: #3d4a8a;
+      border: 1px solid #e4e8f7;
+      box-shadow: 0 4px 10px rgba(61, 74, 138, 0.08);
+    }
+
+    .box.empty {
+      background: #f6f4ff;
+      border: 1.5px dashed #b9b4d8;
+      box-shadow: inset 0 0 10px rgba(107, 91, 210, 0.06);
+    }
+
+    .box.filled:hover {
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 10px 20px rgba(61, 74, 138, 0.16);
+      color: #6b5bd2;
+    }
+
+    .box.empty:hover {
+      transform: translateY(-3px) scale(1.04);
+      border-color: #8b7fe0;
+      background: #eeebff;
+    }
+
+    .signature {
+      margin-top: 26px;
+      text-align: center;
+      font-size: 13px;
+      letter-spacing: 1px;
+      color: #8a90ad;
+    }
+
+    .signature span {
+      display: inline-block;
+      padding: 6px 18px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid #e4e8f7;
+    }
+
+    @media (max-width: 560px) {
+      body {
+        padding: 28px 14px 40px;
+      }
+
+      .screen-header h1 {
+        font-size: 24px;
+      }
+
+      .grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 8px;
+      }
+
+      .box {
+        border-radius: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="screen">
+    <header class="screen-header">
+      <h1>逢七过</h1>
+      <p>共 100 个盒子，凡是 <strong>7 的倍数</strong> 或 <strong>含有数字 7</strong> 的数字，盒子留空；其余盒子显示对应数字。</p>
+    </header>
+
+    <div class="summary">
+      <span class="summary-item"><span class="legend-dot filled"></span>显示数字 <b id="filledCount">0</b> 个</span>
+      <span class="summary-item"><span class="legend-dot empty"></span>空盒子 <b id="emptyCount">0</b> 个</span>
+    </div>
+
+    <div class="grid" id="grid" aria-label="1 到 100 的盒子"></div>
+
+    <p class="signature"><span>24001010631 药恩祈</span></p>
+  </div>
+
+  <script>
+    (function () {
+      var grid = document.getElementById("grid");
+      var filledCount = document.getElementById("filledCount");
+      var emptyCount = document.getElementById("emptyCount");
+      var filled = 0;
+      var empty = 0;
+      var fragment = document.createDocumentFragment();
+
+      function shouldPass(number) {
+        return number % 7 === 0 || String(number).indexOf("7") !== -1;
+      }
+
+      for (var i = 1; i <= 100; i++) {
+        var box = document.createElement("div");
+        box.className = "box";
+
+        if (shouldPass(i)) {
+          box.classList.add("empty");
+          box.setAttribute("aria-label", i + " 号：空盒子");
+          empty++;
+        } else {
+          box.classList.add("filled");
+          box.textContent = i;
+          box.setAttribute("aria-label", i + " 号");
+          filled++;
+        }
+
+        fragment.appendChild(box);
+      }
+
+      grid.appendChild(fragment);
+      filledCount.textContent = filled;
+      emptyCount.textContent = empty;
+    })();
+  </script>
+</body>
+</html>
