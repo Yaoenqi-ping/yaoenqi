@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="24001010631 药恩祈">
+  <title>网帖翻译</title>
+  <link rel="stylesheet" href="font/iconfont.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 10px 20px 24px;
+      color: #4b5968;
+      background: #fff;
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+      border-top: 1px solid #e8e8e8;
+      border-bottom: 1px dotted #e5e5e5;
+    }
+
+    .page-header::before {
+      position: absolute;
+      top: -1px;
+      left: 0;
+      width: 68px;
+      height: 2px;
+      background: #4b9ad9;
+      content: "";
+    }
+
+    .page-header h1 {
+      margin: 0;
+      color: #4b5968;
+      font-size: 20px;
+      font-weight: 400;
+    }
+
+    .help-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: #ff6268;
+      font-size: 15px;
+      text-decoration: none;
+    }
+
+    .tag-icon {
+      position: relative;
+      display: inline-block;
+      width: 17px;
+      height: 17px;
+      border: 1.5px solid #b8bdc2;
+      border-radius: 2px 3px 2px 2px;
+      transform: rotate(45deg);
+    }
+
+    .tag-icon::after {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      width: 3px;
+      height: 3px;
+      border: 1px solid #b8bdc2;
+      border-radius: 50%;
+      content: "";
+    }
+
+    .post {
+      display: grid;
+      grid-template-columns: 41px minmax(0, 1fr);
+      padding: 16px 0 14px;
+      border-bottom: 1px dotted #e4e4e4;
+    }
+
+    .post-badges {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 7px;
+      padding-top: 2px;
+    }
+
+    .flag {
+      display: block;
+      width: 33px;
+      height: 23px;
+      font-size: 27px;
+      line-height: 23px;
+      overflow: hidden;
+    }
+
+    .city-badge {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 27px;
+      height: 27px;
+      margin-left: 2px;
+      border-radius: 50%;
+      color: #fff;
+      background: #ff686b;
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .post-content {
+      min-width: 0;
+    }
+
+    .post-title {
+      margin: 0;
+      color: #4b5968;
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.55;
+    }
+
+    .post-meta {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      align-items: center;
+      margin-top: 2px;
+      color: #1d5289;
+      font-size: 17px;
+      line-height: 1.4;
+    }
+
+    .meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+      white-space: nowrap;
+    }
+
+    .meta-icon {
+      position: relative;
+      display: inline-block;
+      flex: 0 0 21px;
+      width: 21px;
+      height: 21px;
+      color: #b7c0c8;
+    }
+
+    .clock-icon {
+      border: 1.5px solid #b7c0c8;
+      border-radius: 50%;
+    }
+
+    .clock-icon::before {
+      position: absolute;
+      top: 4px;
+      left: 9px;
+      width: 1px;
+      height: 6px;
+      background: #b7c0c8;
+      content: "";
+    }
+
+    .clock-icon::after {
+      position: absolute;
+      top: 9px;
+      left: 9px;
+      width: 5px;
+      height: 1px;
+      background: #b7c0c8;
+      content: "";
+      transform: rotate(28deg);
+      transform-origin: left center;
+    }
+
+    .view-icon {
+      font-size: 21px;
+      line-height: 21px;
+    }
+
+    .comment-icon {
+      width: 21px;
+      height: 16px;
+      border: 1.5px solid #aeb8c0;
+      border-radius: 3px;
+    }
+
+    .comment-icon::after {
+      position: absolute;
+      bottom: -4px;
+      left: 4px;
+      width: 5px;
+      height: 5px;
+      border-left: 1.5px solid #aeb8c0;
+      background: #fff;
+      content: "";
+      transform: skewY(-35deg);
+    }
+
+    @media (max-width: 700px) {
+      body {
+        padding-right: 14px;
+        padding-left: 14px;
+      }
+
+      .post {
+        grid-template-columns: 38px minmax(0, 1fr);
+      }
+
+      .post-title {
+        font-size: 16px;
+      }
+
+      .post-meta {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        row-gap: 6px;
+        font-size: 15px;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .post-meta {
+        grid-template-columns: 1fr;
+      }
+
+      .help-link {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="page-header">
+      <h1>网帖翻译</h1>
+      <a class="help-link" href="#" aria-label="新手翻译说明">
+        <span class="tag-icon" aria-hidden="true"></span>
+        <span>新手翻译说明</span>
+      </a>
+    </header>
+
+    <section class="post" aria-label="帖子">
+      <div class="post-badges">
+        <span class="flag" role="img" aria-label="联合国旗帜">🇺🇳</span>
+        <span class="city-badge" aria-label="市">市</span>
+      </div>
+      <div class="post-content">
+        <h2 class="post-title">X上外网民汇总战况引上网民崩溃，帖子下土网民悲呼：怎么除了日本人和台湾(地区)人，所有人都不支持我们啊...</h2>
+        <div class="post-meta">
+          <span class="meta-item"><i class="meta-icon clock-icon" aria-hidden="true"></i><time datetime="2026-10-29">2026-10-29</time></span>
+          <span class="meta-item">种花家一只兔</span>
+          <span class="meta-item"><i class="iconfont icon-sousuo view-icon" aria-hidden="true"></i>6703</span>
+          <span class="meta-item"><i class="meta-icon comment-icon" aria-hidden="true"></i>51</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="post" aria-label="帖子">
+      <div class="post-badges">
+        <span class="flag" role="img" aria-label="土耳其国旗">🇹🇷</span>
+        <span class="city-badge" aria-label="市">市</span>
+      </div>
+      <div class="post-content">
+        <h2 class="post-title">土耳其人颠倒叙事搞认知作战，说是中国人先用派大量图片侮辱他们才引发大战，国人出征：自己管不住嘴被骂惨了真够双标真够贱</h2>
+        <div class="post-meta">
+          <span class="meta-item"><i class="meta-icon clock-icon" aria-hidden="true"></i><time datetime="2026-10-29">2026-10-29</time></span>
+          <span class="meta-item">熊猫永不为奴</span>
+          <span class="meta-item"><i class="iconfont icon-sousuo view-icon" aria-hidden="true"></i>3871</span>
+          <span class="meta-item"><i class="meta-icon comment-icon" aria-hidden="true"></i>3</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="post" aria-label="帖子">
+      <div class="post-badges">
+        <span class="flag" role="img" aria-label="美国国旗">🇺🇸</span>
+        <span class="city-badge" aria-label="市">市</span>
+      </div>
+      <div class="post-content">
+        <h2 class="post-title">我们过早地去工业化，把就业和产能拱手让给了中国；移民不受限制，掏空了自己；还向以色列无休止地输送资金、打无休止的战争，最终毁了自己</h2>
+        <div class="post-meta">
+          <span class="meta-item"><i class="meta-icon clock-icon" aria-hidden="true"></i><time datetime="2026-10-29">2026-10-29</time></span>
+          <span class="meta-item">宰宰子</span>
+          <span class="meta-item"><i class="iconfont icon-sousuo view-icon" aria-hidden="true"></i>2246</span>
+          <span class="meta-item"><i class="meta-icon comment-icon" aria-hidden="true"></i>13</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="post" aria-label="帖子">
+      <div class="post-badges">
+        <span class="flag" role="img" aria-label="越南国旗">🇻🇳</span>
+        <span class="city-badge" aria-label="市">市</span>
+      </div>
+      <div class="post-content">
+        <h2 class="post-title">中国正在加快建设“生育友好型社会”。越南网友讨论育儿成本、彩礼与教育内卷，感叹“生得起养不起”</h2>
+        <div class="post-meta">
+          <span class="meta-item"><i class="meta-icon clock-icon" aria-hidden="true"></i><time datetime="2026-10-29">2026-10-29</time></span>
+          <span class="meta-item">分格里</span>
+          <span class="meta-item"><i class="iconfont icon-sousuo view-icon" aria-hidden="true"></i>1639</span>
+          <span class="meta-item"><i class="meta-icon comment-icon" aria-hidden="true"></i>16</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="post" aria-label="帖子">
+      <div class="post-badges">
+        <span class="flag" role="img" aria-label="法国国旗">🇫🇷</span>
+      </div>
+      <div class="post-content">
+        <h2 class="post-title">欧媒：法国的抗议暴乱，让法国经济混乱，人们渴望更多的福利，网友讽刺：领福利的人可不是街头这些抗议的人，他们连工作都没有</h2>
+        <div class="post-meta">
+          <span class="meta-item"><i class="meta-icon clock-icon" aria-hidden="true"></i><time datetime="2026-10-29">2026-10-29</time></span>
+          <span class="meta-item">熊猫永不为奴</span>
+          <span class="meta-item"><i class="iconfont icon-sousuo view-icon" aria-hidden="true"></i>1387</span>
+          <span class="meta-item"><i class="meta-icon comment-icon" aria-hidden="true"></i>9</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="post" aria-label="帖子">
+      <div class="post-badges">
+        <span class="flag" role="img" aria-label="美国国旗">🇺🇸</span>
+      </div>
+      <div class="post-content">
+        <h2 class="post-title">为什么这些“老头乐”在中国越来越受欢迎？一条关于中国三轮电动车的短视频引爆油管网友5500条讨论</h2>
+        <div class="post-meta">
+          <span class="meta-item"><i class="meta-icon clock-icon" aria-hidden="true"></i><time datetime="2026-10-29">2026-10-29</time></span>
+          <span class="meta-item">文学准青年</span>
+          <span class="meta-item"><i class="iconfont icon-sousuo view-icon" aria-hidden="true"></i>2926</span>
+          <span class="meta-item"><i class="meta-icon comment-icon" aria-hidden="true"></i>22</span>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

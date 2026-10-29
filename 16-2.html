@@ -1,0 +1,1693 @@
+<!DOCTYPE html>
+<!--
+  作者：药恩祈
+  建立时间：2026-10-29 13:46
+  使用大模型：deepseek/deepseek-flash
+  功能名称：JavaScript 对象可视化演示
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="24001010631 药恩祈">
+  <title>16-2 JavaScript 对象</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --ink: #252a41;
+      --muted: #6f7691;
+      --line: #e6e8f2;
+      --accent: #5b5bd6;
+      --accent-soft: #efefff;
+      --card: #ffffff;
+    }
+
+    body {
+      font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      min-height: 100vh;
+      padding: 34px 18px 54px;
+      background: linear-gradient(160deg, #eef1ff 0%, #f7f4ff 48%, #eaf7fb 100%);
+      color: var(--ink);
+      line-height: 1.7;
+    }
+
+    .page {
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 34px 30px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #353a7a 0%, #5b5bd6 58%, #7c6fe0 100%);
+      color: #fff;
+      box-shadow: 0 20px 44px rgba(72, 74, 168, 0.26);
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .hero::before {
+      width: 220px;
+      height: 220px;
+      top: -110px;
+      right: -50px;
+    }
+
+    .hero::after {
+      width: 130px;
+      height: 130px;
+      bottom: -80px;
+      right: 150px;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      font-size: 12px;
+      letter-spacing: 2px;
+      margin-bottom: 14px;
+    }
+
+    .hero h1 {
+      position: relative;
+      z-index: 1;
+      font-size: 30px;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .hero p {
+      position: relative;
+      z-index: 1;
+      max-width: 660px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .hero-keywords {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .hero-keywords span {
+      padding: 4px 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.14);
+      font-size: 12px;
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .section {
+      margin-top: 38px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .section-num {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border-radius: 8px;
+      padding: 3px 9px;
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .section-head h2 {
+      font-size: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .demo-card {
+      display: flex;
+      flex-direction: column;
+      padding: 22px;
+      border-radius: 18px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: 0 8px 22px rgba(53, 58, 122, 0.06);
+    }
+
+    .demo-card.wide {
+      grid-column: 1 / -1;
+    }
+
+    .demo-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .demo-title h3 {
+      font-size: 16px;
+    }
+
+    .demo-badge {
+      font-size: 11px;
+      font-family: Consolas, "Courier New", monospace;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 2px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    .demo-desc {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    pre {
+      background: #23263d;
+      border-radius: 12px;
+      padding: 14px 16px;
+      overflow-x: auto;
+      margin-bottom: 14px;
+    }
+
+    pre code {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12.5px;
+      line-height: 1.65;
+      color: #d9dcff;
+    }
+
+    .create-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .create-card {
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      border-radius: 18px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: 0 8px 22px rgba(53, 58, 122, 0.06);
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .create-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 14px 30px rgba(53, 58, 122, 0.12);
+    }
+
+    .create-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      margin-bottom: 12px;
+      border-radius: 12px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 17px;
+      font-weight: 700;
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .create-card:nth-child(2) .create-icon {
+      background: #fff2e5;
+      color: #cf6a18;
+    }
+
+    .create-card:nth-child(3) .create-icon {
+      background: #e4f7f5;
+      color: #0f9b8e;
+    }
+
+    .create-card h3 {
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .create-card p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .create-card pre {
+      margin: auto 0 0;
+    }
+
+    .object-box {
+      position: relative;
+      padding: 12px 14px 14px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #f7f8ff, #eef9fc);
+      border: 1px solid #e8eaf6;
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .object-head {
+      padding: 2px 4px 8px;
+      font-size: 12.5px;
+      color: #7c81a6;
+    }
+
+    .object-head b {
+      color: var(--accent);
+    }
+
+    .object-foot {
+      padding: 6px 4px 0;
+      font-size: 12.5px;
+      color: #7c81a6;
+    }
+
+    .prop-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      animation: cellIn 0.3s ease both;
+      transition: background 0.22s ease, box-shadow 0.22s ease, opacity 0.22s ease,
+        transform 0.22s ease;
+    }
+
+    .prop-row + .prop-row {
+      margin-top: 2px;
+    }
+
+    .interactive-object .prop-row {
+      cursor: pointer;
+    }
+
+    .interactive-object .prop-row:hover {
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(61, 71, 144, 0.08);
+    }
+
+    .prop-key {
+      color: #7338c9;
+      font-size: 13.5px;
+      font-weight: 700;
+    }
+
+    .prop-colon {
+      color: #9aa0bc;
+      font-size: 13.5px;
+    }
+
+    .prop-value {
+      font-size: 13.5px;
+      font-weight: 600;
+      overflow-wrap: anywhere;
+    }
+
+    .type-string {
+      color: #0f8f81;
+    }
+
+    .type-number {
+      color: #1d6fae;
+    }
+
+    .type-boolean {
+      color: #bd6017;
+    }
+
+    .type-function {
+      color: #b54b7f;
+      font-style: italic;
+    }
+
+    .prop-type {
+      margin-left: auto;
+      padding: 1px 6px;
+      border-radius: 5px;
+      border: 1px solid #e3e6f3;
+      background: #fff;
+      color: #9aa0bc;
+      font-size: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    .prop-row.is-mark {
+      background: #fff;
+      box-shadow: 0 0 0 1px #cfd3f5, 0 6px 14px rgba(91, 91, 214, 0.12);
+    }
+
+    .prop-row.is-new {
+      background: #e9faf6;
+      animation: cellPop 0.4s ease both;
+    }
+
+    .prop-row.is-leaving {
+      opacity: 0;
+      transform: translateX(24px);
+    }
+
+    .access-readout {
+      min-height: 54px;
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: #f7f8fd;
+      border: 1px dashed #d9dcee;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .access-readout .line {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .access-readout .line + .line {
+      margin-top: 4px;
+    }
+
+    .access-readout code {
+      padding: 1px 6px;
+      border-radius: 6px;
+      background: #ececff;
+      color: #4b50b5;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12.5px;
+    }
+
+    .access-readout strong {
+      color: #0f8f81;
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .access-readout .arrow {
+      color: #a6acc2;
+    }
+
+    .op-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 16px 0 12px;
+    }
+
+    .op-bar button {
+      padding: 8px 14px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12.5px;
+    }
+
+    button {
+      padding: 9px 18px;
+      border: none;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 14px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease,
+        opacity 0.18s ease;
+      box-shadow: 0 6px 14px rgba(91, 91, 214, 0.28);
+    }
+
+    button:hover {
+      background: #4b4bc4;
+      box-shadow: 0 8px 18px rgba(91, 91, 214, 0.36);
+    }
+
+    button:active {
+      transform: scale(0.96);
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    button.ghost {
+      background: #fff;
+      color: var(--accent);
+      border: 1px solid #d9dcee;
+      box-shadow: none;
+    }
+
+    button.ghost:hover {
+      background: #f3f4ff;
+      box-shadow: none;
+    }
+
+    .op-state {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #23263d;
+      overflow-x: auto;
+    }
+
+    .op-state code {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12.5px;
+      color: #d9dcff;
+      white-space: nowrap;
+    }
+
+    .op-return {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .op-return-label {
+      padding: 1px 8px;
+      border-radius: 6px;
+      background: #eef1ff;
+      color: #4b50b5;
+      font-size: 11px;
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    #objReturn {
+      font-family: Consolas, "Courier New", monospace;
+      font-weight: 600;
+      color: #2f7d6f;
+    }
+
+    .op-log {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-height: 28px;
+      margin-top: 12px;
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+
+    .op-log .placeholder {
+      color: #a6acc2;
+    }
+
+    .op-log-entry {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: cellIn 0.25s ease both;
+    }
+
+    .log-tag {
+      padding: 1px 7px;
+      border-radius: 5px;
+      background: #eef1ff;
+      color: #4b50b5;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 11px;
+    }
+
+    .hint {
+      margin-top: 12px;
+      font-size: 12.5px;
+      color: #8a90ad;
+      line-height: 1.7;
+    }
+
+    .field-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .field-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .walk-output {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px dashed #dfe3f5;
+      background: #fafbff;
+      margin-top: 12px;
+    }
+
+    .walk-item {
+      padding: 4px 10px;
+      border-radius: 8px;
+      background: #eef1ff;
+      color: #3f4799;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12.5px;
+      animation: cellPop 0.3s ease both;
+    }
+
+    .walk-empty {
+      color: #a6acc2;
+      font-size: 12px;
+    }
+
+    .pipe-label {
+      flex: 0 0 78px;
+      padding: 4px 6px;
+      border-radius: 8px;
+      background: #ececff;
+      color: #5b5bd6;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12.5px;
+      text-align: center;
+    }
+
+    .keys-groups {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .keys-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .keys-row .pipe-label {
+      flex: 0 0 86px;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .mini-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      background: #eef1ff;
+      color: #3f4799;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12px;
+      animation: cellIn 0.25s ease both;
+    }
+
+    .mini-chip.value {
+      background: #e6f8f4;
+      color: #0f8f81;
+    }
+
+    .mini-chip.entry {
+      background: #fff4e8;
+      color: #b5651b;
+    }
+
+    .speech {
+      position: relative;
+      display: flex;
+      align-items: center;
+      min-height: 58px;
+      margin-top: 14px;
+      padding: 12px 16px;
+      border-radius: 14px;
+      border: 1px solid #d8eef5;
+      background: #eef8fb;
+      color: #2b6b80;
+      font-size: 14px;
+    }
+
+    .speech::before {
+      content: "";
+      position: absolute;
+      top: -6px;
+      left: 24px;
+      width: 10px;
+      height: 10px;
+      background: #eef8fb;
+      border-top: 1px solid #d8eef5;
+      border-left: 1px solid #d8eef5;
+      transform: rotate(45deg);
+    }
+
+    .speech.empty {
+      color: #9aa0bc;
+      font-size: 12.5px;
+      background: #fafbff;
+      border-style: dashed;
+      border-color: #dfe3f5;
+    }
+
+    .speech.empty::before {
+      display: none;
+    }
+
+    .counter-value {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 92px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #f2f3ff, #eef8fb);
+      color: var(--accent);
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 44px;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .counter-value.bump {
+      animation: bump 0.32s ease;
+    }
+
+    .counter-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .counter-readout {
+      margin-top: 12px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: #f7f8fd;
+      border: 1px dashed #d9dcee;
+      font-size: 12.5px;
+      color: var(--muted);
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .counter-readout b {
+      color: #0f9b8e;
+      font-size: 15px;
+    }
+
+    .student-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .student-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: #f8f9ff;
+      border: 1px solid #eceefa;
+      animation: cellIn 0.3s ease both;
+    }
+
+    .student-avatar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #ececff;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .student-name {
+      flex: 1;
+      font-size: 14px;
+    }
+
+    .student-score {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f9b8e;
+    }
+
+    .student-score.high {
+      color: #cf6a18;
+    }
+
+    #jsonOutput {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      min-height: 150px;
+      margin-bottom: 14px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 8px 22px rgba(53, 58, 122, 0.06);
+    }
+
+    .method-table {
+      width: 100%;
+      min-width: 640px;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+
+    .method-table th {
+      padding: 12px 14px;
+      background: #f3f4ff;
+      color: #444a7d;
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .method-table td {
+      padding: 11px 14px;
+      border-top: 1px solid #eff1f9;
+      vertical-align: top;
+    }
+
+    .method-table tbody tr:hover {
+      background: #fafbff;
+    }
+
+    .method-table code {
+      padding: 1px 6px;
+      border-radius: 6px;
+      background: #f2f3ff;
+      color: #4b50b5;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12.5px;
+      white-space: nowrap;
+    }
+
+    .page-footer {
+      margin-top: 36px;
+      text-align: center;
+      font-size: 13px;
+      letter-spacing: 1px;
+      color: #8a90ad;
+    }
+
+    .page-footer span {
+      display: inline-block;
+      padding: 7px 20px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid #e6e8f2;
+    }
+
+    @keyframes cellIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes cellPop {
+      0% {
+        opacity: 0;
+        transform: scale(0.65);
+      }
+      70% {
+        transform: scale(1.06);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes bump {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.14);
+        color: #0f9b8e;
+      }
+      100% {
+        transform: scale(1);
+        color: var(--accent);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .demo-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .demo-card.wide {
+        grid-column: auto;
+      }
+
+      .create-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      body {
+        padding: 20px 12px 40px;
+      }
+
+      .hero {
+        padding: 26px 20px;
+        border-radius: 20px;
+      }
+
+      .hero h1 {
+        font-size: 24px;
+      }
+
+      .demo-card,
+      .create-card {
+        padding: 18px;
+      }
+
+      .keys-row {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .keys-row .pipe-label {
+        flex: none;
+      }
+
+      .prop-type {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <span class="hero-tag">16-2</span>
+      <h1>JavaScript 对象</h1>
+      <p>对象用“键值对”描述一个具体事物：名字、年龄、城市……每个属性都有属性名和属性值。下面用可交互的示例，演示对象的创建、访问、修改、遍历与方法调用。</p>
+      <div class="hero-keywords">
+        <span>key : value</span>
+        <span>obj.key</span>
+        <span>for...in</span>
+        <span>this</span>
+        <span>JSON</span>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="section-num">01</span>
+        <h2>对象是键值对的集合</h2>
+      </div>
+      <div class="demo-grid">
+        <article class="demo-card wide">
+          <div class="demo-title">
+            <h3>一张人物卡片就是一个对象</h3>
+            <span class="demo-badge">4 个属性</span>
+          </div>
+          <p class="demo-desc">左边是属性名（键），冒号后面是属性值。点击任意一行，查看点号访问与方括号访问两种写法。</p>
+          <div class="object-box interactive-object" id="personBox"></div>
+          <div class="access-readout" id="accessReadout">点击任意属性，查看两种访问方式</div>
+          <p class="hint">属性名本质上是字符串，所以 person.name 与 person["name"] 等价。字符串值用引号包裹，数字、布尔值直接书写。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="section-num">02</span>
+        <h2>创建对象的三种常见方式</h2>
+      </div>
+      <div class="create-grid">
+        <article class="create-card">
+          <div class="create-icon">{ }</div>
+          <h3>对象字面量</h3>
+          <p>最常用：用花括号直接写出键值对，冒号分隔键和值，逗号分隔属性。</p>
+          <pre><code>const person = {
+  name: "小明",
+  age: 18,
+  city: "北京"
+};</code></pre>
+        </article>
+        <article class="create-card">
+          <div class="create-icon">new</div>
+          <h3>new Object()</h3>
+          <p>先创建一个空对象，再逐个添加属性。写法较啰嗦，了解即可。</p>
+          <pre><code>const person = new Object();
+
+person.name = "小明";
+person.age = 18;
+person.city = "北京";</code></pre>
+        </article>
+        <article class="create-card">
+          <div class="create-icon">ƒ</div>
+          <h3>构造函数</h3>
+          <p>需要批量创建结构相同的对象时，用构造函数配合 new 生成实例。</p>
+          <pre><code>function Person(name, age) {
+  this.name = name;
+  this.age = age;
+}
+
+const p = new Person("小明", 18);</code></pre>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="section-num">03</span>
+        <h2>对象操作台：读取、修改、新增与删除</h2>
+      </div>
+      <div class="demo-grid">
+        <article class="demo-card wide">
+          <div class="demo-title">
+            <h3>obj = { name: "小明", age: 18, city: "北京" }</h3>
+            <span class="demo-badge">会改变原对象</span>
+          </div>
+          <p class="demo-desc">点击按钮执行读取、修改、新增和删除操作，观察属性行的变化，以及代码下方的返回值。</p>
+          <div class="object-box" id="objPlayBox"></div>
+          <div class="op-bar" id="objBar">
+            <button type="button" data-obj-action="readDot">obj.name</button>
+            <button type="button" data-obj-action="readBracket">obj["name"]</button>
+            <button type="button" data-obj-action="update">obj.age = 20</button>
+            <button type="button" data-obj-action="add">obj.hobby = "篮球"</button>
+            <button type="button" data-obj-action="delete">delete obj.city</button>
+            <button type="button" class="ghost" data-obj-action="reset">重置</button>
+          </div>
+          <div class="op-state">
+            <code id="objCode">// 点击上方按钮操作对象</code>
+          </div>
+          <div class="op-return">
+            <span class="op-return-label">返回值</span>
+            <span id="objReturn">—</span>
+          </div>
+          <div class="op-log" id="objLog">
+            <span class="placeholder">操作记录会显示在这里</span>
+          </div>
+          <p class="hint">给已存在的属性赋值就是修改，给不存在的属性赋值就是新增；delete 只能删除属性，不能删除用 const 声明的对象变量本身。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="section-num">04</span>
+        <h2>遍历对象的属性</h2>
+      </div>
+      <div class="demo-grid">
+        <article class="demo-card">
+          <div class="demo-title">
+            <h3>for...in 逐个访问</h3>
+            <span class="demo-badge">键名循环</span>
+          </div>
+          <p class="demo-desc">for...in 会依次取出对象的每个属性名，再通过 obj[key] 拿到属性值。</p>
+          <pre><code>for (const key in obj) {
+  console.log(key, obj[key]);
+}</code></pre>
+          <div class="object-box" id="walkObjBox"></div>
+          <div class="field-row" style="margin-top: 14px;">
+            <button type="button" id="walkObjBtn">开始遍历</button>
+          </div>
+          <div class="walk-output" id="walkObjResult" aria-live="polite">
+            <span class="walk-empty">点击按钮，按顺序输出每个键和值</span>
+          </div>
+        </article>
+
+        <article class="demo-card">
+          <div class="demo-title">
+            <h3>Object.keys / values / entries</h3>
+            <span class="demo-badge">返回数组</span>
+          </div>
+          <p class="demo-desc">这三个方法把对象的键、值或键值对转换成数组，方便继续使用数组方法处理。</p>
+          <div class="keys-groups">
+            <div class="keys-row">
+              <span class="pipe-label">keys</span>
+              <div class="chip-row" id="keysChips"></div>
+            </div>
+            <div class="keys-row">
+              <span class="pipe-label">values</span>
+              <div class="chip-row" id="valuesChips"></div>
+            </div>
+            <div class="keys-row">
+              <span class="pipe-label">entries</span>
+              <div class="chip-row" id="entriesChips"></div>
+            </div>
+          </div>
+          <pre><code>Object.keys(obj);    // ["name", "age", "city"]
+Object.values(obj);  // ["小明", 18, "北京"]
+Object.entries(obj); // [["name", "小明"], ...]</code></pre>
+          <p class="hint">注意：for...in 拿到的是键名，要用 obj[key] 才能取到值；Object.keys 等方法返回的是新数组。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="section-num">05</span>
+        <h2>对象的方法与 this</h2>
+      </div>
+      <div class="demo-grid">
+        <article class="demo-card">
+          <div class="demo-title">
+            <h3>方法：写在对象里的函数</h3>
+            <span class="demo-badge">this 指向 person</span>
+          </div>
+          <p class="demo-desc">对象的方法可以读取同一个对象里的其他属性。点击按钮调用 greet，看看 this 指向谁。</p>
+          <div class="object-box" id="greetBox"></div>
+          <div class="field-row" style="margin-top: 14px;">
+            <button type="button" id="greetBtn">调用 person.greet()</button>
+          </div>
+          <div class="speech empty" id="greetOutput">点击按钮后，这里会出现方法的返回值</div>
+          <p class="hint">person.greet() 调用时，方法内部的 this 指向 person，因此 this.name 就是 person.name。</p>
+        </article>
+
+        <article class="demo-card">
+          <div class="demo-title">
+            <h3>用 this 修改自身状态</h3>
+            <span class="demo-badge">计数器</span>
+          </div>
+          <p class="demo-desc">每次调用 counter.inc()，方法通过 this.count++ 修改对象自己的 count 属性。</p>
+          <pre><code>const counter = {
+  count: 0,
+  inc() {
+    this.count++;
+    return this.count;
+  }
+};</code></pre>
+          <div class="counter-value" id="counterValue">0</div>
+          <div class="counter-actions">
+            <button type="button" id="incBtn">counter.inc()</button>
+            <button type="button" class="ghost" id="resetCounter">重置</button>
+          </div>
+          <div class="counter-readout">counter.count = <b id="counterReadout">0</b></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="section-num">06</span>
+        <h2>对象数组与 JSON</h2>
+      </div>
+      <div class="demo-grid">
+        <article class="demo-card">
+          <div class="demo-title">
+            <h3>数组里的对象</h3>
+            <span class="demo-badge">3 位同学</span>
+          </div>
+          <p class="demo-desc">实际开发中，经常把结构相同的对象放进数组，再用数组方法排序、筛选。</p>
+          <div class="student-list" id="studentList"></div>
+          <div class="field-row" style="margin-top: 14px;">
+            <button type="button" id="sortStudents">按分数从高到低排序</button>
+            <button type="button" class="ghost" id="resetStudents">恢复顺序</button>
+          </div>
+          <p class="hint">students.sort((a, b) =&gt; b.score - a.score) 通过对象的 score 属性比较分数。sort 会改变 students 数组的顺序。</p>
+        </article>
+
+        <article class="demo-card">
+          <div class="demo-title">
+            <h3>JSON.stringify：对象转字符串</h3>
+            <span class="demo-badge">数据交换格式</span>
+          </div>
+          <p class="demo-desc">JSON 是描述数据的文本格式，属性名必须用双引号。格式化后更易读，压缩后更省空间。</p>
+          <pre><code id="jsonOutput"></code></pre>
+          <div class="field-row">
+            <button type="button" id="jsonBtn">格式化 JSON</button>
+          </div>
+          <p class="hint">JSON.stringify 只序列化可枚举的属性；函数、undefined 会被忽略。用 JSON.parse 可以把字符串还原成对象。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="section-num">07</span>
+        <h2>对象常用操作速查表</h2>
+      </div>
+      <div class="table-wrap">
+        <table class="method-table">
+          <thead>
+            <tr>
+              <th>操作</th>
+              <th>写法</th>
+              <th>说明</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>读取属性</td>
+              <td><code>obj.name</code> / <code>obj["name"]</code></td>
+              <td>点号访问；方括号里放字符串，可存放变量</td>
+            </tr>
+            <tr>
+              <td>修改属性</td>
+              <td><code>obj.name = "新值"</code></td>
+              <td>属性已存在时，更新它的值</td>
+            </tr>
+            <tr>
+              <td>新增属性</td>
+              <td><code>obj.hobby = "篮球"</code></td>
+              <td>属性不存在时，自动新增</td>
+            </tr>
+            <tr>
+              <td>删除属性</td>
+              <td><code>delete obj.name</code></td>
+              <td>删除整个键值对，而不是把值设为 undefined</td>
+            </tr>
+            <tr>
+              <td>检测属性</td>
+              <td><code>"name" in obj</code></td>
+              <td>返回布尔值，判断属性是否存在</td>
+            </tr>
+            <tr>
+              <td>所有键</td>
+              <td><code>Object.keys(obj)</code></td>
+              <td>返回键名组成的数组</td>
+            </tr>
+            <tr>
+              <td>所有值</td>
+              <td><code>Object.values(obj)</code></td>
+              <td>返回属性值组成的数组</td>
+            </tr>
+            <tr>
+              <td>键值对</td>
+              <td><code>Object.entries(obj)</code></td>
+              <td>返回 [键, 值] 组成的二维数组</td>
+            </tr>
+            <tr>
+              <td>合并对象</td>
+              <td><code>Object.assign({}, a, b)</code></td>
+              <td>把多个对象合并成一个新对象</td>
+            </tr>
+            <tr>
+              <td>展开复制</td>
+              <td><code>{ ...a, ...b }</code></td>
+              <td>用展开运算符复制或合并对象</td>
+            </tr>
+            <tr>
+              <td>序列化</td>
+              <td><code>JSON.stringify(obj)</code></td>
+              <td>对象转成 JSON 字符串</td>
+            </tr>
+            <tr>
+              <td>解析</td>
+              <td><code>JSON.parse(str)</code></td>
+              <td>JSON 字符串还原成对象</td>
+            </tr>
+            <tr>
+              <td>冻结对象</td>
+              <td><code>Object.freeze(obj)</code></td>
+              <td>禁止新增、修改和删除属性</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="page-footer"><span>24001010631 药恩祈</span></footer>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      function typeOfValue(value) {
+        if (Array.isArray(value)) {
+          return "array";
+        }
+        return typeof value;
+      }
+
+      function displayValue(value) {
+        if (typeof value === "string") {
+          return '"' + value + '"';
+        }
+        if (typeof value === "boolean") {
+          return value ? "true" : "false";
+        }
+        if (value === null) {
+          return "null";
+        }
+        if (Array.isArray(value)) {
+          return "[" + value.join(", ") + "]";
+        }
+        if (typeof value === "object") {
+          return "{ ... }";
+        }
+        return String(value);
+      }
+
+      function createPropRow(key, value, extraClass) {
+        var row = document.createElement("div");
+        row.className = "prop-row" + (extraClass ? " " + extraClass : "");
+        row.setAttribute("data-key", key);
+
+        var keyEl = document.createElement("span");
+        keyEl.className = "prop-key";
+        keyEl.textContent = key;
+
+        var colonEl = document.createElement("span");
+        colonEl.className = "prop-colon";
+        colonEl.textContent = ":";
+
+        var type = typeOfValue(value);
+
+        var valueEl = document.createElement("span");
+        valueEl.className = "prop-value type-" + type;
+        valueEl.textContent = typeof value === "function"
+          ? "ƒ " + key + "()"
+          : displayValue(value);
+
+        var typeEl = document.createElement("span");
+        typeEl.className = "prop-type";
+        typeEl.textContent = type === "function" ? "method" : type;
+
+        row.appendChild(keyEl);
+        row.appendChild(colonEl);
+        row.appendChild(valueEl);
+        row.appendChild(typeEl);
+        return row;
+      }
+
+      function renderObject(target, object, options) {
+        options = options || {};
+
+        target.innerHTML = "";
+
+        var head = document.createElement("div");
+        head.className = "object-head";
+        head.innerHTML = "const <b>" + (options.title || "obj") + "</b> = {";
+        target.appendChild(head);
+
+        Object.keys(object).forEach(function (key) {
+          var extra = "";
+          if (options.newKey === key) {
+            extra = "is-new";
+          } else if (options.markKey === key) {
+            extra = "is-mark";
+          }
+          target.appendChild(createPropRow(key, object[key], extra));
+        });
+
+        var foot = document.createElement("div");
+        foot.className = "object-foot";
+        foot.textContent = "}";
+        target.appendChild(foot);
+      }
+
+      function addLog(container, tag, description) {
+        var entry = document.createElement("div");
+        entry.className = "op-log-entry";
+
+        var tagEl = document.createElement("span");
+        tagEl.className = "log-tag";
+        tagEl.textContent = tag;
+
+        var textEl = document.createElement("span");
+        textEl.textContent = description;
+
+        entry.appendChild(tagEl);
+        entry.appendChild(textEl);
+
+        var placeholder = container.querySelector(".placeholder");
+        if (placeholder) {
+          container.removeChild(placeholder);
+        }
+
+        container.insertBefore(entry, container.firstChild);
+
+        while (container.children.length > 5) {
+          container.removeChild(container.lastChild);
+        }
+      }
+
+      /* ---------- 01 键值对与访问 ---------- */
+      var person = { name: "小明", age: 18, city: "北京", isStudent: true };
+      var personBox = document.getElementById("personBox");
+      var accessReadout = document.getElementById("accessReadout");
+
+      renderObject(personBox, person, { title: "person" });
+
+      personBox.addEventListener("click", function (event) {
+        var row = event.target.closest(".prop-row");
+        if (!row) {
+          return;
+        }
+
+        Array.prototype.forEach.call(personBox.querySelectorAll(".prop-row"), function (item) {
+          item.classList.remove("is-mark");
+        });
+        row.classList.add("is-mark");
+
+        var key = row.getAttribute("data-key");
+        var value = displayValue(person[key]);
+
+        accessReadout.innerHTML =
+          '<div class="line"><code>person.' + key + "</code>" +
+          '<span class="arrow">→</span><strong>' + value + "</strong></div>" +
+          '<div class="line"><code>person["' + key + '"]</code>' +
+          '<span class="arrow">→</span><strong>' + value + "</strong></div>";
+      });
+
+      /* ---------- 03 对象操作台 ---------- */
+      var playObject = { name: "小明", age: 18, city: "北京" };
+      var objPlayBox = document.getElementById("objPlayBox");
+      var objCode = document.getElementById("objCode");
+      var objReturn = document.getElementById("objReturn");
+      var objLog = document.getElementById("objLog");
+      var objBusy = false;
+
+      function setObjOperation(code, returned, tag, description) {
+        objCode.textContent = code;
+        objReturn.textContent = returned;
+        addLog(objLog, tag, description);
+      }
+
+      function markObjRow(key) {
+        Array.prototype.forEach.call(objPlayBox.querySelectorAll(".prop-row"), function (row) {
+          row.classList.toggle("is-mark", row.getAttribute("data-key") === key);
+        });
+      }
+
+      function performObjectAction(action) {
+        if (objBusy) {
+          return;
+        }
+
+        if (action === "reset") {
+          playObject = { name: "小明", age: 18, city: "北京" };
+          renderObject(objPlayBox, playObject, { title: "obj" });
+          objCode.textContent = "// 已重置为初始对象";
+          objReturn.textContent = "—";
+          objLog.innerHTML = '<span class="placeholder">操作记录会显示在这里</span>';
+          return;
+        }
+
+        if (action === "readDot" || action === "readBracket") {
+          var code = action === "readDot" ? "obj.name" : 'obj["name"]';
+          var valueText = displayValue(playObject.name);
+          markObjRow("name");
+          setObjOperation(code, valueText, "读取",
+            "name 的属性值为 " + valueText + "，两种写法结果相同");
+          return;
+        }
+
+        if (action === "update") {
+          playObject.age = 20;
+          renderObject(objPlayBox, playObject, { title: "obj", newKey: "age" });
+          setObjOperation("obj.age = 20", "20", "修改", "age 属性被更新为 20");
+          return;
+        }
+
+        if (action === "add") {
+          var existed = Object.prototype.hasOwnProperty.call(playObject, "hobby");
+          playObject.hobby = "篮球";
+          renderObject(objPlayBox, playObject, { title: "obj", newKey: "hobby" });
+          setObjOperation('obj.hobby = "篮球"', '"篮球"', "新增",
+            existed ? "hobby 已存在，这里的赋值相当于修改" : "新增 hobby 属性，值为 篮球");
+          return;
+        }
+
+        if (action === "delete") {
+          if (!Object.prototype.hasOwnProperty.call(playObject, "city")) {
+            setObjOperation("delete obj.city", "true", "删除",
+              "city 已经不存在，delete 仍然返回 true");
+            return;
+          }
+
+          var cityRow = objPlayBox.querySelector('.prop-row[data-key="city"]');
+          objBusy = true;
+
+          if (cityRow) {
+            cityRow.classList.add("is-leaving");
+          }
+
+          setTimeout(function () {
+            delete playObject.city;
+            renderObject(objPlayBox, playObject, { title: "obj" });
+            objBusy = false;
+            setObjOperation("delete obj.city", "true", "删除", "city 属性已从对象中移除");
+          }, 220);
+        }
+      }
+
+      document.getElementById("objBar").addEventListener("click", function (event) {
+        var button = event.target.closest("button[data-obj-action]");
+        if (!button) {
+          return;
+        }
+        performObjectAction(button.getAttribute("data-obj-action"));
+      });
+
+      renderObject(objPlayBox, playObject, { title: "obj" });
+
+      /* ---------- 04 for...in 遍历 ---------- */
+      var walkObject = { name: "小明", age: 18, city: "北京" };
+      var walkObjBox = document.getElementById("walkObjBox");
+      var walkObjResult = document.getElementById("walkObjResult");
+      var walkObjBtn = document.getElementById("walkObjBtn");
+      var walkTimers = [];
+      var walking = false;
+
+      renderObject(walkObjBox, walkObject, { title: "obj" });
+
+      function markWalkRow(key) {
+        Array.prototype.forEach.call(walkObjBox.querySelectorAll(".prop-row"), function (row) {
+          row.classList.toggle("is-mark", row.getAttribute("data-key") === key);
+        });
+      }
+
+      function startObjectWalk() {
+        if (walking) {
+          return;
+        }
+
+        walkTimers.forEach(function (timer) {
+          clearTimeout(timer);
+        });
+        walkTimers = [];
+
+        walking = true;
+        walkObjBtn.disabled = true;
+        walkObjResult.innerHTML = "";
+
+        var keys = Object.keys(walkObject);
+
+        keys.forEach(function (key, index) {
+          walkTimers.push(setTimeout(function () {
+            markWalkRow(key);
+
+            var chip = document.createElement("span");
+            chip.className = "walk-item";
+            chip.textContent = key + " → " + displayValue(walkObject[key]);
+            walkObjResult.appendChild(chip);
+          }, index * 650));
+        });
+
+        walkTimers.push(setTimeout(function () {
+          markWalkRow("");
+          walking = false;
+          walkObjBtn.disabled = false;
+        }, keys.length * 650 + 400));
+      }
+
+      walkObjBtn.addEventListener("click", startObjectWalk);
+
+      /* ---------- 04 Object.keys / values / entries ---------- */
+      var keysChips = document.getElementById("keysChips");
+      var valuesChips = document.getElementById("valuesChips");
+      var entriesChips = document.getElementById("entriesChips");
+
+      Object.keys(walkObject).forEach(function (key) {
+        var chip = document.createElement("span");
+        chip.className = "mini-chip";
+        chip.textContent = key;
+        keysChips.appendChild(chip);
+      });
+
+      Object.values(walkObject).forEach(function (value) {
+        var chip = document.createElement("span");
+        chip.className = "mini-chip value";
+        chip.textContent = displayValue(value);
+        valuesChips.appendChild(chip);
+      });
+
+      Object.entries(walkObject).forEach(function (entry) {
+        var chip = document.createElement("span");
+        chip.className = "mini-chip entry";
+        chip.textContent = entry[0] + ": " + displayValue(entry[1]);
+        entriesChips.appendChild(chip);
+      });
+
+      /* ---------- 05 方法与 this ---------- */
+      var greetPerson = {
+        name: "小红",
+        greet: function () {
+          return "你好，我是" + this.name;
+        }
+      };
+
+      var greetBox = document.getElementById("greetBox");
+      var greetOutput = document.getElementById("greetOutput");
+
+      renderObject(greetBox, greetPerson, { title: "person" });
+
+      document.getElementById("greetBtn").addEventListener("click", function () {
+        greetOutput.classList.remove("empty");
+        greetOutput.textContent = greetPerson.greet();
+
+        Array.prototype.forEach.call(greetBox.querySelectorAll(".prop-row"), function (row) {
+          row.classList.toggle("is-mark", row.getAttribute("data-key") === "greet");
+        });
+      });
+
+      var counter = {
+        count: 0,
+        inc: function () {
+          this.count++;
+          return this.count;
+        }
+      };
+
+      var counterValue = document.getElementById("counterValue");
+      var counterReadout = document.getElementById("counterReadout");
+
+      document.getElementById("incBtn").addEventListener("click", function () {
+        var result = counter.inc();
+
+        counterValue.textContent = result;
+        counterValue.classList.remove("bump");
+        void counterValue.offsetWidth;
+        counterValue.classList.add("bump");
+        counterReadout.textContent = counter.count;
+      });
+
+      document.getElementById("resetCounter").addEventListener("click", function () {
+        counter.count = 0;
+        counterValue.textContent = "0";
+        counterReadout.textContent = "0";
+      });
+
+      /* ---------- 06 对象数组 ---------- */
+      var initialStudents = [
+        { name: "小明", score: 85 },
+        { name: "小红", score: 92 },
+        { name: "小刚", score: 78 }
+      ];
+      var students = initialStudents.slice();
+      var studentList = document.getElementById("studentList");
+
+      function renderStudents() {
+        studentList.innerHTML = "";
+
+        students.forEach(function (student) {
+          var item = document.createElement("div");
+          item.className = "student-item";
+
+          var avatar = document.createElement("span");
+          avatar.className = "student-avatar";
+          avatar.textContent = student.name.charAt(0);
+
+          var name = document.createElement("span");
+          name.className = "student-name";
+          name.textContent = student.name;
+
+          var score = document.createElement("span");
+          score.className = "student-score" + (student.score >= 90 ? " high" : "");
+          score.textContent = student.score + " 分";
+
+          item.appendChild(avatar);
+          item.appendChild(name);
+          item.appendChild(score);
+          studentList.appendChild(item);
+        });
+      }
+
+      /* ---------- 06 JSON ---------- */
+      var jsonOutput = document.getElementById("jsonOutput");
+      var jsonBtn = document.getElementById("jsonBtn");
+      var jsonPretty = false;
+
+      function renderJson() {
+        jsonOutput.textContent = jsonPretty
+          ? JSON.stringify(students, null, 2)
+          : JSON.stringify(students);
+        jsonBtn.textContent = jsonPretty ? "压缩 JSON" : "格式化 JSON";
+      }
+
+      document.getElementById("sortStudents").addEventListener("click", function () {
+        students.sort(function (a, b) {
+          return b.score - a.score;
+        });
+        renderStudents();
+        renderJson();
+      });
+
+      document.getElementById("resetStudents").addEventListener("click", function () {
+        students = initialStudents.slice();
+        renderStudents();
+        renderJson();
+      });
+
+      jsonBtn.addEventListener("click", function () {
+        jsonPretty = !jsonPretty;
+        renderJson();
+      });
+
+      renderStudents();
+      renderJson();
+    })();
+  </script>
+</body>
+</html>

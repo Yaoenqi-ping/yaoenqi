@@ -1,0 +1,1872 @@
+<!DOCTYPE html>
+<!--
+  作者：药恩祈
+  建立时间：2026-10-29 13:41
+  使用大模型：deepseek/deepseek-flash
+  功能名称：JavaScript 数组主要方法可视化演示
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="24001010631 药恩祈">
+  <title>16-1 JavaScript 数组方法</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --ink: #252a41;
+      --muted: #6f7691;
+      --line: #e6e8f2;
+      --accent: #5b5bd6;
+      --accent-soft: #efefff;
+      --card: #ffffff;
+    }
+
+    body {
+      font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      min-height: 100vh;
+      padding: 34px 18px 54px;
+      background: linear-gradient(160deg, #eef1ff 0%, #f7f4ff 48%, #eaf7fb 100%);
+      color: var(--ink);
+      line-height: 1.7;
+    }
+
+    .page {
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 34px 30px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #353a7a 0%, #5b5bd6 58%, #7c6fe0 100%);
+      color: #fff;
+      box-shadow: 0 20px 44px rgba(72, 74, 168, 0.26);
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .hero::before {
+      width: 220px;
+      height: 220px;
+      top: -110px;
+      right: -50px;
+    }
+
+    .hero::after {
+      width: 130px;
+      height: 130px;
+      bottom: -80px;
+      right: 150px;
+    }
+
+    .hero-tag {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      font-size: 12px;
+      letter-spacing: 2px;
+      margin-bottom: 14px;
+    }
+
+    .hero h1 {
+      position: relative;
+      z-index: 1;
+      font-size: 30px;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .hero p {
+      position: relative;
+      z-index: 1;
+      max-width: 660px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .hero-keywords {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .hero-keywords span {
+      padding: 4px 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.14);
+      font-size: 12px;
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .section {
+      margin-top: 38px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .section-num {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border-radius: 8px;
+      padding: 3px 9px;
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    .section-head h2 {
+      font-size: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .demo-card {
+      display: flex;
+      flex-direction: column;
+      padding: 22px;
+      border-radius: 18px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: 0 8px 22px rgba(53, 58, 122, 0.06);
+    }
+
+    .demo-card.wide {
+      grid-column: 1 / -1;
+    }
+
+    .demo-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .demo-title h3 {
+      font-size: 16px;
+    }
+
+    .demo-badge {
+      font-size: 11px;
+      font-family: Consolas, "Courier New", monospace;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 2px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    .demo-desc {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    pre {
+      background: #23263d;
+      border-radius: 12px;
+      padding: 14px 16px;
+      overflow-x: auto;
+      margin-bottom: 14px;
+    }
+
+    pre code {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12.5px;
+      line-height: 1.65;
+      color: #d9dcff;
+    }
+
+    .array-track {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: 10px;
+      min-height: 92px;
+      padding: 18px 16px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #f7f8ff, #eef9fc);
+      border: 1px solid #e8eaf6;
+    }
+
+    .array-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      animation: cellIn 0.3s ease both;
+    }
+
+    .cell-value {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 52px;
+      height: 48px;
+      padding: 0 12px;
+      border-radius: 12px;
+      border: 2px solid #dfe3f5;
+      background: #fff;
+      color: #3d4790;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 16px;
+      font-weight: 700;
+      box-shadow: 0 4px 10px rgba(61, 71, 144, 0.08);
+      transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease,
+        color 0.25s ease, opacity 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .cell-index {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 11px;
+      color: #9aa0bc;
+    }
+
+    .interactive .array-cell {
+      cursor: pointer;
+    }
+
+    .interactive .array-cell:hover .cell-value {
+      border-color: #b9bdf0;
+      transform: translateY(-3px);
+    }
+
+    .array-cell.is-mark .cell-value,
+    .array-cell.is-selected .cell-value {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: #4440b8;
+      transform: translateY(-4px);
+      box-shadow: 0 10px 20px rgba(91, 91, 214, 0.2);
+    }
+
+    .array-cell.is-selected .cell-value {
+      border-color: #0f9b8e;
+      background: #e6f8f4;
+      color: #0f8f81;
+      box-shadow: 0 10px 20px rgba(15, 155, 142, 0.16);
+    }
+
+    .array-cell.is-new .cell-value {
+      border-color: #8fd3c7;
+      background: #e9faf6;
+      color: #0f8f81;
+      animation: cellPop 0.4s ease both;
+    }
+
+    .array-cell.is-bonus .cell-value {
+      border-color: #f3c391;
+      background: #fff4e8;
+      color: #b5651b;
+    }
+
+    .array-cell.is-leaving .cell-value {
+      opacity: 0;
+      transform: translateY(-16px) scale(0.7);
+    }
+
+    .array-cell.is-visited .cell-value {
+      border-style: dashed;
+      background: #f5f6fc;
+      color: #9aa0c0;
+      box-shadow: none;
+    }
+
+    .array-track.mini {
+      min-height: 0;
+      gap: 8px;
+      padding: 12px;
+    }
+
+    .array-track.mini .cell-value {
+      min-width: 40px;
+      height: 38px;
+      font-size: 14px;
+      border-radius: 9px;
+      border-width: 1px;
+    }
+
+    .array-track.mini .cell-index {
+      font-size: 10px;
+    }
+
+    .index-readout {
+      margin-top: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: #f7f8fd;
+      border: 1px dashed #d9dcee;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .index-readout strong {
+      color: var(--accent);
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 15px;
+    }
+
+    .index-readout span {
+      font-size: 12px;
+      color: #9aa0bc;
+    }
+
+    .op-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 16px 0 12px;
+    }
+
+    .op-bar button {
+      padding: 8px 14px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12.5px;
+    }
+
+    button {
+      padding: 9px 18px;
+      border: none;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 14px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease,
+        opacity 0.18s ease;
+      box-shadow: 0 6px 14px rgba(91, 91, 214, 0.28);
+    }
+
+    button:hover {
+      background: #4b4bc4;
+      box-shadow: 0 8px 18px rgba(91, 91, 214, 0.36);
+    }
+
+    button:active {
+      transform: scale(0.96);
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    button.ghost {
+      background: #fff;
+      color: var(--accent);
+      border: 1px solid #d9dcee;
+      box-shadow: none;
+    }
+
+    button.ghost:hover {
+      background: #f3f4ff;
+      box-shadow: none;
+    }
+
+    .op-state {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #23263d;
+      overflow-x: auto;
+    }
+
+    .op-state code {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12.5px;
+      color: #d9dcff;
+      white-space: nowrap;
+    }
+
+    .op-return {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .op-return-label {
+      padding: 1px 8px;
+      border-radius: 6px;
+      background: #eef1ff;
+      color: #4b50b5;
+      font-size: 11px;
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    #opReturn {
+      font-family: Consolas, "Courier New", monospace;
+      font-weight: 600;
+      color: #2f7d6f;
+    }
+
+    .op-log {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-height: 28px;
+      margin-top: 12px;
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+
+    .op-log .placeholder {
+      color: #a6acc2;
+    }
+
+    .op-log-entry {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: cellIn 0.25s ease both;
+    }
+
+    .log-tag {
+      padding: 1px 7px;
+      border-radius: 5px;
+      background: #eef1ff;
+      color: #4b50b5;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 11px;
+    }
+
+    .hint {
+      margin-top: 12px;
+      font-size: 12.5px;
+      color: #8a90ad;
+      line-height: 1.7;
+    }
+
+    .pipeline {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .pipe-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #f8f9ff;
+      border: 1px solid #eceefa;
+    }
+
+    .pipe-label {
+      flex: 0 0 78px;
+      padding: 4px 6px;
+      border-radius: 8px;
+      background: #ececff;
+      color: #5b5bd6;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12.5px;
+      text-align: center;
+    }
+
+    .score-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      min-height: 38px;
+    }
+
+    .pipe-empty {
+      color: #aab0c8;
+      font-size: 12px;
+    }
+
+    .score-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 46px;
+      height: 36px;
+      padding: 0 10px;
+      border-radius: 9px;
+      border: 1px solid #dfe3f5;
+      background: #fff;
+      color: #3d4790;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 14px;
+      font-weight: 700;
+      animation: cellPop 0.35s ease both;
+      transition: opacity 0.3s ease, color 0.3s ease, border-color 0.3s ease,
+        background 0.3s ease;
+    }
+
+    .score-chip.is-fail {
+      opacity: 0.3;
+      color: #9aa0b8;
+      border-color: #e5e7f2;
+      text-decoration: line-through;
+    }
+
+    .score-chip.is-bonus {
+      border-color: #f3c391;
+      background: #fff4e8;
+      color: #b5651b;
+    }
+
+    .reduce-result {
+      display: flex;
+      align-items: center;
+      min-height: 38px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 26px;
+      font-weight: 700;
+      color: #0f9b8e;
+      transition: color 0.3s ease;
+    }
+
+    .reduce-result span {
+      margin-left: 5px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #7a839c;
+    }
+
+    .field-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .field-row:last-child {
+      margin-bottom: 0;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+      flex: 1;
+      min-width: 130px;
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fafbff;
+      color: var(--ink);
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(91, 91, 214, 0.12);
+    }
+
+    .search-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 14px 0 12px;
+    }
+
+    .search-controls button {
+      padding: 8px 12px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12.5px;
+    }
+
+    .result {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      min-height: 54px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #f7f8fd;
+      border: 1px dashed #d9dcee;
+      font-size: 14px;
+    }
+
+    .result .placeholder {
+      color: #9aa0ba;
+      font-size: 13px;
+    }
+
+    .result strong {
+      color: var(--accent);
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 17px;
+    }
+
+    .result code {
+      padding: 1px 6px;
+      border-radius: 6px;
+      background: #ececff;
+      color: #4b50b5;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12.5px;
+    }
+
+    .result .good {
+      color: #0f9b8e;
+      font-weight: 700;
+    }
+
+    .result .bad {
+      color: #dc2626;
+      font-weight: 700;
+    }
+
+    .walk-output {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px dashed #dfe3f5;
+      background: #fafbff;
+      margin-top: 12px;
+    }
+
+    .walk-item {
+      padding: 4px 10px;
+      border-radius: 8px;
+      background: #eef1ff;
+      color: #3f4799;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12.5px;
+      animation: cellPop 0.3s ease both;
+    }
+
+    .walk-empty {
+      color: #a6acc2;
+      font-size: 12px;
+    }
+
+    .concat-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .concat-line .pipe-label {
+      flex: 0 0 52px;
+      font-size: 11.5px;
+    }
+
+    .concat-result {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed #e3e6f3;
+    }
+
+    .concat-result .pipe-label {
+      flex: 0 0 52px;
+      background: #e6f8f4;
+      color: #0f8f81;
+      font-size: 10.5px;
+    }
+
+    .join-output {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      min-height: 48px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #f7f8fd;
+      border: 1px dashed #d9dcee;
+    }
+
+    .join-output code {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12.5px;
+      color: #3f4799;
+      word-break: break-all;
+    }
+
+    .join-output .arrow {
+      color: #a6acc2;
+    }
+
+    #joinOutput {
+      color: #0f9b8e;
+      font-weight: 700;
+    }
+
+    .range-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px 24px;
+      margin: 14px 0;
+    }
+
+    .range-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .range-label {
+      flex: 0 0 84px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12.5px;
+      color: #5b648c;
+    }
+
+    .range-label b {
+      color: var(--accent);
+      font-size: 14px;
+    }
+
+    input[type="range"] {
+      flex: 1;
+      min-width: 0;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .slice-box {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #f7f8fd;
+      border: 1px dashed #d9dcee;
+    }
+
+    .slice-box code {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 13px;
+      color: #3f4799;
+    }
+
+    .slice-box .arrow {
+      color: #a6acc2;
+    }
+
+    #sliceResult {
+      color: #0f9b8e;
+      font-weight: 700;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 8px 22px rgba(53, 58, 122, 0.06);
+    }
+
+    .method-table {
+      width: 100%;
+      min-width: 680px;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+
+    .method-table th {
+      padding: 12px 14px;
+      background: #f3f4ff;
+      color: #444a7d;
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .method-table td {
+      padding: 11px 14px;
+      border-top: 1px solid #eff1f9;
+      vertical-align: top;
+    }
+
+    .method-table tbody tr:hover {
+      background: #fafbff;
+    }
+
+    .method-table code {
+      padding: 1px 6px;
+      border-radius: 6px;
+      background: #f2f3ff;
+      color: #4b50b5;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12.5px;
+      white-space: nowrap;
+    }
+
+    .mutate-yes {
+      color: #d97706;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .mutate-no {
+      color: #0f9b8e;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .page-footer {
+      margin-top: 36px;
+      text-align: center;
+      font-size: 13px;
+      letter-spacing: 1px;
+      color: #8a90ad;
+    }
+
+    .page-footer span {
+      display: inline-block;
+      padding: 7px 20px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid #e6e8f2;
+    }
+
+    @keyframes cellIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes cellPop {
+      0% {
+        opacity: 0;
+        transform: scale(0.65);
+      }
+      70% {
+        transform: scale(1.06);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .demo-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .demo-card.wide {
+        grid-column: auto;
+      }
+    }
+
+    @media (max-width: 620px) {
+      body {
+        padding: 20px 12px 40px;
+      }
+
+      .hero {
+        padding: 26px 20px;
+        border-radius: 20px;
+      }
+
+      .hero h1 {
+        font-size: 24px;
+      }
+
+      .demo-card {
+        padding: 18px;
+      }
+
+      .range-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pipe-row {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .pipe-label {
+        flex: none;
+      }
+
+      .array-track {
+        padding: 14px 12px;
+        min-height: 82px;
+      }
+
+      .cell-value {
+        min-width: 44px;
+        height: 42px;
+        padding: 0 9px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <span class="hero-tag">16-1</span>
+      <h1>JavaScript 数组方法</h1>
+      <p>数组是 JavaScript 中最常用的数据结构之一。下面把数组画成一排方块，通过点击、拖拽和运行示例，直观感受增删、遍历、查找与转换方法的效果。</p>
+      <div class="hero-keywords">
+        <span>push / pop</span>
+        <span>map / filter</span>
+        <span>reduce</span>
+        <span>indexOf / includes</span>
+        <span>slice / concat</span>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="section-num">01</span>
+        <h2>先认识数组：索引从 0 开始</h2>
+      </div>
+      <div class="demo-grid">
+        <article class="demo-card wide">
+          <div class="demo-title">
+            <h3>一排有序的方块</h3>
+            <span class="demo-badge">arr.length = 5</span>
+          </div>
+          <p class="demo-desc">数组中的每个元素都有一个数字下标（索引），第一个元素的下标是 0，最后一个元素的下标是 length - 1。点击任意方块查看访问方式。</p>
+          <div class="array-track interactive" id="sampleTrack">
+            <div class="array-cell" data-index="0" data-value="苹果">
+              <span class="cell-value">苹果</span>
+              <span class="cell-index">0</span>
+            </div>
+            <div class="array-cell" data-index="1" data-value="香蕉">
+              <span class="cell-value">香蕉</span>
+              <span class="cell-index">1</span>
+            </div>
+            <div class="array-cell" data-index="2" data-value="橙子">
+              <span class="cell-value">橙子</span>
+              <span class="cell-index">2</span>
+            </div>
+            <div class="array-cell" data-index="3" data-value="葡萄">
+              <span class="cell-value">葡萄</span>
+              <span class="cell-index">3</span>
+            </div>
+            <div class="array-cell" data-index="4" data-value="西瓜">
+              <span class="cell-value">西瓜</span>
+              <span class="cell-index">4</span>
+            </div>
+          </div>
+          <div class="index-readout" id="indexReadout">点击任意方块，查看通过索引访问元素的方式</div>
+          <p class="hint">方块下方的小数字就是索引；数组长度 length 等于元素个数，因此最后一个索引是 length - 1。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="section-num">02</span>
+        <h2>操作台：增删、反转与排序（会改变原数组）</h2>
+      </div>
+      <div class="demo-grid">
+        <article class="demo-card wide">
+          <div class="demo-title">
+            <h3>push / pop / unshift / shift / splice / reverse / sort</h3>
+            <span class="demo-badge">arr = [5, 2, 8, 1, 9]</span>
+          </div>
+          <p class="demo-desc">每次点击按钮都会真正调用一次数组方法，注意观察方块的变化，以及下方显示的返回值。</p>
+          <div class="array-track" id="playTrack"></div>
+          <div class="op-bar" id="opBar">
+            <button type="button" data-action="push">push(11)</button>
+            <button type="button" data-action="pop">pop()</button>
+            <button type="button" data-action="unshift">unshift(0)</button>
+            <button type="button" data-action="shift">shift()</button>
+            <button type="button" data-action="splice">splice(2, 1)</button>
+            <button type="button" data-action="reverse">reverse()</button>
+            <button type="button" data-action="sort">sort()</button>
+            <button type="button" class="ghost" data-action="reset">重置</button>
+          </div>
+          <div class="op-state">
+            <code id="opCode">// 点击上方按钮执行数组方法</code>
+          </div>
+          <div class="op-return">
+            <span class="op-return-label">返回值</span>
+            <span id="opReturn">—</span>
+          </div>
+          <div class="op-log" id="opLog">
+            <span class="placeholder">操作记录会显示在这里</span>
+          </div>
+          <p class="hint">push / unshift 返回新长度；pop / shift 返回被删除的元素；splice 返回被删除元素组成的新数组；reverse / sort 返回原数组的引用，并且都会修改原数组。注意：sort 不传比较函数时按字符串字典序排序，10 会排在 2 前面。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="section-num">03</span>
+        <h2>遍历与变换：filter → map → reduce</h2>
+      </div>
+      <div class="demo-grid">
+        <article class="demo-card wide">
+          <div class="demo-title">
+            <h3>数据处理管道</h3>
+            <span class="demo-badge">返回新数组 / 新值</span>
+          </div>
+          <p class="demo-desc">先把不及格的成绩过滤掉，再给每个成绩加 5 分，最后求和。点击运行，观察每一步的数据变化。</p>
+          <pre><code>const passed  = scores.filter(s =&gt; s &gt;= 60);
+const boosted = passed.map(s =&gt; s + 5);
+const total   = boosted.reduce((sum, s) =&gt; sum + s, 0);</code></pre>
+          <div class="pipeline">
+            <div class="pipe-row">
+              <span class="pipe-label">原始</span>
+              <div class="score-row" id="stageOriginal"></div>
+            </div>
+            <div class="pipe-row">
+              <span class="pipe-label">filter</span>
+              <div class="score-row" id="stageFilter"></div>
+            </div>
+            <div class="pipe-row">
+              <span class="pipe-label">map</span>
+              <div class="score-row" id="stageMap"></div>
+            </div>
+            <div class="pipe-row">
+              <span class="pipe-label">reduce</span>
+              <div class="reduce-result" id="stageReduce">—</div>
+            </div>
+          </div>
+          <div class="field-row" style="margin-top: 14px;">
+            <button type="button" id="runPipeline">运行管道</button>
+            <button type="button" class="ghost" id="resetPipeline">重置</button>
+          </div>
+          <p class="hint">filter、map、reduce 都不会修改原数组；filter 保留满足条件的元素，map 把每个元素变成新值，reduce 把所有元素累积成一个结果。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="section-num">04</span>
+        <h2>查找与遍历</h2>
+      </div>
+      <div class="demo-grid">
+        <article class="demo-card">
+          <div class="demo-title">
+            <h3>查找元素</h3>
+            <span class="demo-badge">indexOf / includes / findIndex</span>
+          </div>
+          <p class="demo-desc">输入水果名，用三种方法分别查找，观察返回值和高亮位置。</p>
+          <div class="array-track" id="fruitTrack"></div>
+          <div class="search-controls">
+            <input type="text" id="fruitInput" value="橙子" aria-label="输入水果名">
+            <button type="button" data-find="indexOf">indexOf</button>
+            <button type="button" data-find="includes">includes</button>
+            <button type="button" data-find="findIndex">findIndex</button>
+          </div>
+          <div class="result" id="fruitResult" aria-live="polite"></div>
+          <p class="hint">找不到时，indexOf 与 findIndex 返回 -1，includes 返回 false。indexOf / includes 适合简单值查找，find / findIndex 可以传入回调，处理更复杂的判断。</p>
+        </article>
+
+        <article class="demo-card">
+          <div class="demo-title">
+            <h3>forEach：逐个访问</h3>
+            <span class="demo-badge">没有返回值</span>
+          </div>
+          <p class="demo-desc">按顺序对每个元素执行一次回调函数，适合做遍历输出，不会产生新数组。</p>
+          <pre><code>arr.forEach((item, i) =&gt; {
+  console.log(i, item);
+});</code></pre>
+          <div class="array-track" id="walkTrack"></div>
+          <div class="field-row">
+            <button type="button" id="walkBtn">开始遍历</button>
+          </div>
+          <div class="walk-output" id="walkResult" aria-live="polite">
+            <span class="walk-empty">点击按钮逐个访问元素</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="section-num">05</span>
+        <h2>连接、截取与拼接</h2>
+      </div>
+      <div class="demo-grid">
+        <article class="demo-card">
+          <div class="demo-title">
+            <h3>join：数组变字符串</h3>
+            <span class="demo-badge">返回字符串</span>
+          </div>
+          <p class="demo-desc">用分隔符把数组元素连接成一个字符串，原数组不受影响。</p>
+          <div class="array-track mini" id="joinTrack"></div>
+          <div class="field-row" style="margin-top: 14px;">
+            <select id="joinSelect" aria-label="选择分隔符">
+              <option value="，">逗号（，）</option>
+              <option value="、">顿号（、）</option>
+              <option value="-">连字符（-）</option>
+              <option value=" ">空格</option>
+              <option value="">无分隔符</option>
+            </select>
+          </div>
+          <div class="join-output">
+            <code id="joinCode">arr.join("，")</code>
+            <span class="arrow">→</span>
+            <code id="joinOutput"></code>
+          </div>
+          <p class="hint">分隔符可以是任意字符串；传入空字符串时，元素会直接连在一起。join 常用于把数组展示成一段文字。</p>
+        </article>
+
+        <article class="demo-card">
+          <div class="demo-title">
+            <h3>concat：拼接数组</h3>
+            <span class="demo-badge">返回新数组</span>
+          </div>
+          <p class="demo-desc">把多个数组拼在一起，返回新数组，a 和 b 都不会被修改。橙色方块来自数组 b。</p>
+          <div class="concat-line">
+            <span class="pipe-label">a</span>
+            <div class="array-track mini" id="concatA"></div>
+          </div>
+          <div class="concat-line">
+            <span class="pipe-label">b</span>
+            <div class="array-track mini" id="concatB"></div>
+          </div>
+          <div class="concat-result">
+            <span class="pipe-label">结果</span>
+            <div class="array-track mini" id="concatResult"></div>
+          </div>
+          <div class="field-row" style="margin-top: 12px;">
+            <button type="button" class="ghost" id="concatBtn">重新拼接</button>
+          </div>
+        </article>
+
+        <article class="demo-card wide">
+          <div class="demo-title">
+            <h3>slice：截取一段</h3>
+            <span class="demo-badge">不包含结束索引</span>
+          </div>
+          <p class="demo-desc">拖动滑块选择 start 与 end，截取 [start, end) 区间的元素。slice 返回新数组，原数组保持不变。</p>
+          <div class="array-track" id="sliceTrack"></div>
+          <div class="range-grid">
+            <div class="range-row">
+              <span class="range-label">start <b id="sliceStartValue">1</b></span>
+              <input type="range" id="sliceStart" min="0" max="6" value="1" aria-label="起始索引">
+            </div>
+            <div class="range-row">
+              <span class="range-label">end <b id="sliceEndValue">4</b></span>
+              <input type="range" id="sliceEnd" min="0" max="6" value="4" aria-label="结束索引">
+            </div>
+          </div>
+          <div class="slice-box">
+            <code id="sliceCode">arr.slice(1, 4)</code>
+            <span class="arrow">→</span>
+            <code id="sliceResult"></code>
+          </div>
+          <p class="hint">slice 的结束索引不包含在结果中；如果 end 小于 start，会得到空数组。绿色方块表示被选中的区间。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <span class="section-num">06</span>
+        <h2>常用方法速查表</h2>
+      </div>
+      <div class="table-wrap">
+        <table class="method-table">
+          <thead>
+            <tr>
+              <th>方法</th>
+              <th>作用</th>
+              <th>改变原数组</th>
+              <th>返回值</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>push(x)</code></td>
+              <td>在末尾添加一个或多个元素</td>
+              <td><span class="mutate-yes">是</span></td>
+              <td>新长度</td>
+            </tr>
+            <tr>
+              <td><code>pop()</code></td>
+              <td>删除最后一个元素</td>
+              <td><span class="mutate-yes">是</span></td>
+              <td>被删除的元素</td>
+            </tr>
+            <tr>
+              <td><code>unshift(x)</code></td>
+              <td>在开头添加一个或多个元素</td>
+              <td><span class="mutate-yes">是</span></td>
+              <td>新长度</td>
+            </tr>
+            <tr>
+              <td><code>shift()</code></td>
+              <td>删除第一个元素</td>
+              <td><span class="mutate-yes">是</span></td>
+              <td>被删除的元素</td>
+            </tr>
+            <tr>
+              <td><code>splice(i, n, ...)</code></td>
+              <td>从索引 i 开始删除 n 个，可插入新元素</td>
+              <td><span class="mutate-yes">是</span></td>
+              <td>被删除元素组成的新数组</td>
+            </tr>
+            <tr>
+              <td><code>reverse()</code></td>
+              <td>反转数组顺序</td>
+              <td><span class="mutate-yes">是</span></td>
+              <td>原数组（引用）</td>
+            </tr>
+            <tr>
+              <td><code>sort(fn)</code></td>
+              <td>对元素排序</td>
+              <td><span class="mutate-yes">是</span></td>
+              <td>原数组（引用）</td>
+            </tr>
+            <tr>
+              <td><code>slice(i, j)</code></td>
+              <td>截取 [i, j) 区间</td>
+              <td><span class="mutate-no">否</span></td>
+              <td>新数组</td>
+            </tr>
+            <tr>
+              <td><code>concat(...)</code></td>
+              <td>拼接一个或多个数组</td>
+              <td><span class="mutate-no">否</span></td>
+              <td>新数组</td>
+            </tr>
+            <tr>
+              <td><code>join(sep)</code></td>
+              <td>用分隔符连接成字符串</td>
+              <td><span class="mutate-no">否</span></td>
+              <td>字符串</td>
+            </tr>
+            <tr>
+              <td><code>indexOf(x)</code></td>
+              <td>查找 x 第一次出现的索引</td>
+              <td><span class="mutate-no">否</span></td>
+              <td>索引或 -1</td>
+            </tr>
+            <tr>
+              <td><code>includes(x)</code></td>
+              <td>判断数组是否包含 x</td>
+              <td><span class="mutate-no">否</span></td>
+              <td>true / false</td>
+            </tr>
+            <tr>
+              <td><code>find(fn)</code></td>
+              <td>返回第一个满足条件的元素</td>
+              <td><span class="mutate-no">否</span></td>
+              <td>元素或 undefined</td>
+            </tr>
+            <tr>
+              <td><code>findIndex(fn)</code></td>
+              <td>返回第一个满足条件的索引</td>
+              <td><span class="mutate-no">否</span></td>
+              <td>索引或 -1</td>
+            </tr>
+            <tr>
+              <td><code>forEach(fn)</code></td>
+              <td>遍历每个元素</td>
+              <td><span class="mutate-no">否</span></td>
+              <td>undefined</td>
+            </tr>
+            <tr>
+              <td><code>map(fn)</code></td>
+              <td>把每个元素映射成新值</td>
+              <td><span class="mutate-no">否</span></td>
+              <td>新数组</td>
+            </tr>
+            <tr>
+              <td><code>filter(fn)</code></td>
+              <td>筛选出满足条件的元素</td>
+              <td><span class="mutate-no">否</span></td>
+              <td>新数组</td>
+            </tr>
+            <tr>
+              <td><code>reduce(fn, init)</code></td>
+              <td>把所有元素累积成一个值</td>
+              <td><span class="mutate-no">否</span></td>
+              <td>累积结果</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="page-footer"><span>24001010631 药恩祈</span></footer>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      function createCell(value, index, extraClass) {
+        var cell = document.createElement("div");
+        cell.className = "array-cell" + (extraClass ? " " + extraClass : "");
+
+        var valueEl = document.createElement("span");
+        valueEl.className = "cell-value";
+        valueEl.textContent = value;
+
+        var indexEl = document.createElement("span");
+        indexEl.className = "cell-index";
+        indexEl.textContent = index;
+
+        cell.appendChild(valueEl);
+        cell.appendChild(indexEl);
+        return cell;
+      }
+
+      function formatArray(list) {
+        return "[" + list.join(", ") + "]";
+      }
+
+      /* ---------- 01 索引演示 ---------- */
+      var sampleTrack = document.getElementById("sampleTrack");
+      var indexReadout = document.getElementById("indexReadout");
+      var sampleCells = sampleTrack.querySelectorAll(".array-cell");
+
+      Array.prototype.forEach.call(sampleCells, function (cell) {
+        cell.addEventListener("click", function () {
+          Array.prototype.forEach.call(sampleCells, function (item) {
+            item.classList.remove("is-mark");
+          });
+
+          cell.classList.add("is-mark");
+
+          var index = cell.getAttribute("data-index");
+          var value = cell.getAttribute("data-value");
+
+          indexReadout.innerHTML = 'arr[' + index + '] → <strong>"' + value + '"</strong> ' +
+            "<span>第 " + (Number(index) + 1) + " 个元素</span>";
+        });
+      });
+
+      /* ---------- 02 数组操作台 ---------- */
+      var playData = [5, 2, 8, 1, 9];
+      var playTrack = document.getElementById("playTrack");
+      var opCode = document.getElementById("opCode");
+      var opReturn = document.getElementById("opReturn");
+      var opLog = document.getElementById("opLog");
+      var busy = false;
+
+      function renderPlay(options) {
+        options = options || {};
+
+        var fragment = document.createDocumentFragment();
+
+        playData.forEach(function (value, index) {
+          var extra = "";
+
+          if (options.newAll) {
+            extra = "is-new";
+          } else if (options.newIndex === index) {
+            extra = "is-new";
+          } else if (options.mark === index) {
+            extra = "is-mark";
+          }
+
+          fragment.appendChild(createCell(value, index, extra));
+        });
+
+        playTrack.innerHTML = "";
+        playTrack.appendChild(fragment);
+      }
+
+      function addLog(tag, description) {
+        var entry = document.createElement("div");
+        entry.className = "op-log-entry";
+
+        var tagEl = document.createElement("span");
+        tagEl.className = "log-tag";
+        tagEl.textContent = tag;
+
+        var textEl = document.createElement("span");
+        textEl.textContent = description;
+
+        entry.appendChild(tagEl);
+        entry.appendChild(textEl);
+
+        var placeholder = opLog.querySelector(".placeholder");
+        if (placeholder) {
+          opLog.removeChild(placeholder);
+        }
+
+        opLog.insertBefore(entry, opLog.firstChild);
+
+        while (opLog.children.length > 5) {
+          opLog.removeChild(opLog.lastChild);
+        }
+      }
+
+      function setOperation(code, returned, tag, description) {
+        opCode.textContent = code;
+        opReturn.textContent = returned;
+        addLog(tag, description);
+      }
+
+      function removeAt(index, callback) {
+        var cell = playTrack.children[index];
+
+        if (!cell) {
+          callback();
+          return;
+        }
+
+        busy = true;
+        cell.classList.add("is-leaving");
+
+        setTimeout(function () {
+          callback();
+          renderPlay();
+          busy = false;
+        }, 220);
+      }
+
+      function perform(action) {
+        if (busy) {
+          return;
+        }
+
+        if (action === "reset") {
+          playData = [5, 2, 8, 1, 9];
+          renderPlay();
+          opCode.textContent = "// 已重置为初始数组";
+          opReturn.textContent = "—";
+          opLog.innerHTML = '<span class="placeholder">操作记录会显示在这里</span>';
+          return;
+        }
+
+        if (action === "push") {
+          var pushedLength = playData.push(11);
+          renderPlay({ newIndex: playData.length - 1 });
+          setOperation("arr.push(11)", "新长度 " + pushedLength, "push",
+            "末尾新增 11，arr = " + formatArray(playData));
+          return;
+        }
+
+        if (action === "pop") {
+          if (!playData.length) {
+            setOperation("arr.pop()", "undefined", "pop", "空数组 pop() 返回 undefined");
+            return;
+          }
+
+          var popped = playData[playData.length - 1];
+          removeAt(playData.length - 1, function () {
+            playData.pop();
+            setOperation("arr.pop()", "返回 " + popped, "pop",
+              "删除末尾元素，arr = " + formatArray(playData));
+          });
+          return;
+        }
+
+        if (action === "unshift") {
+          var unshiftedLength = playData.unshift(0);
+          renderPlay({ newIndex: 0 });
+          setOperation("arr.unshift(0)", "新长度 " + unshiftedLength, "unshift",
+            "开头插入 0，arr = " + formatArray(playData));
+          return;
+        }
+
+        if (action === "shift") {
+          if (!playData.length) {
+            setOperation("arr.shift()", "undefined", "shift", "空数组 shift() 返回 undefined");
+            return;
+          }
+
+          var shifted = playData[0];
+          removeAt(0, function () {
+            playData.shift();
+            setOperation("arr.shift()", "返回 " + shifted, "shift",
+              "删除开头元素，arr = " + formatArray(playData));
+          });
+          return;
+        }
+
+        if (action === "splice") {
+          if (playData.length < 3) {
+            setOperation("arr.splice(2, 1)", "无法演示", "splice",
+              "当前数组不足 3 个元素，请先 push 几个元素");
+            return;
+          }
+
+          var removedItems = playData.slice(2, 3);
+          removeAt(2, function () {
+            playData.splice(2, 1);
+            setOperation("arr.splice(2, 1)", "返回 " + formatArray(removedItems), "splice",
+              "删除索引 2，arr = " + formatArray(playData));
+          });
+          return;
+        }
+
+        if (action === "reverse") {
+          playData.reverse();
+          renderPlay({ newAll: true });
+          setOperation("arr.reverse()", "原数组（引用）", "reverse",
+            "原地反转，arr = " + formatArray(playData));
+          return;
+        }
+
+        if (action === "sort") {
+          playData.sort(function (a, b) {
+            return a - b;
+          });
+          renderPlay({ newAll: true });
+          setOperation("arr.sort((a, b) => a - b)", "原数组（引用）", "sort",
+            "原地升序排列，arr = " + formatArray(playData));
+        }
+      }
+
+      document.getElementById("opBar").addEventListener("click", function (event) {
+        var button = event.target.closest("button[data-action]");
+        if (!button) {
+          return;
+        }
+        perform(button.getAttribute("data-action"));
+      });
+
+      renderPlay();
+
+      /* ---------- 03 filter / map / reduce 管道 ---------- */
+      var scores = [58, 72, 91, 46, 85, 63];
+      var stageOriginal = document.getElementById("stageOriginal");
+      var stageFilter = document.getElementById("stageFilter");
+      var stageMap = document.getElementById("stageMap");
+      var stageReduce = document.getElementById("stageReduce");
+      var runPipelineBtn = document.getElementById("runPipeline");
+      var resetPipelineBtn = document.getElementById("resetPipeline");
+      var pipelineTimers = [];
+
+      function clearPipelineTimers() {
+        pipelineTimers.forEach(function (timer) {
+          clearTimeout(timer);
+        });
+        pipelineTimers = [];
+      }
+
+      function renderScores(container, values, modifier) {
+        container.innerHTML = "";
+        var fragment = document.createDocumentFragment();
+
+        values.forEach(function (value) {
+          var chip = document.createElement("span");
+          chip.className = "score-chip";
+          if (modifier) {
+            chip.classList.add(modifier(value));
+          }
+          chip.textContent = value;
+          fragment.appendChild(chip);
+        });
+
+        container.appendChild(fragment);
+      }
+
+      function runPipeline() {
+        clearPipelineTimers();
+        runPipelineBtn.disabled = true;
+
+        var passed = scores.filter(function (score) {
+          return score >= 60;
+        });
+        var boosted = passed.map(function (score) {
+          return score + 5;
+        });
+        var total = boosted.reduce(function (sum, score) {
+          return sum + score;
+        }, 0);
+
+        renderScores(stageOriginal, scores);
+        stageFilter.innerHTML = "";
+        stageMap.innerHTML = "";
+        stageReduce.textContent = "—";
+
+        pipelineTimers.push(setTimeout(function () {
+          Array.prototype.forEach.call(stageOriginal.children, function (chip, index) {
+            if (scores[index] < 60) {
+              chip.classList.add("is-fail");
+            }
+          });
+        }, 550));
+
+        pipelineTimers.push(setTimeout(function () {
+          renderScores(stageFilter, passed);
+        }, 1100));
+
+        pipelineTimers.push(setTimeout(function () {
+          renderScores(stageMap, boosted, function () {
+            return "is-bonus";
+          });
+        }, 1700));
+
+        pipelineTimers.push(setTimeout(function () {
+          stageReduce.innerHTML = total + " <span>分</span>";
+          runPipelineBtn.disabled = false;
+        }, 2300));
+      }
+
+      function resetPipeline() {
+        clearPipelineTimers();
+        runPipelineBtn.disabled = false;
+        renderScores(stageOriginal, scores);
+        stageFilter.innerHTML = '<span class="pipe-empty">等待运行</span>';
+        stageMap.innerHTML = '<span class="pipe-empty">等待运行</span>';
+        stageReduce.textContent = "—";
+      }
+
+      runPipelineBtn.addEventListener("click", runPipeline);
+      resetPipelineBtn.addEventListener("click", resetPipeline);
+      resetPipeline();
+
+      /* ---------- 04 查找 ---------- */
+      var fruits = ["苹果", "香蕉", "橙子", "葡萄", "西瓜"];
+      var fruitTrack = document.getElementById("fruitTrack");
+      var fruitInput = document.getElementById("fruitInput");
+      var fruitResult = document.getElementById("fruitResult");
+
+      function renderFruits(markIndex) {
+        fruitTrack.innerHTML = "";
+        var fragment = document.createDocumentFragment();
+
+        fruits.forEach(function (name, index) {
+          fragment.appendChild(createCell(name, index, index === markIndex ? "is-mark" : ""));
+        });
+
+        fruitTrack.appendChild(fragment);
+      }
+
+      function searchFruit(method) {
+        var keyword = fruitInput.value.trim();
+
+        if (!keyword) {
+          renderFruits(-1);
+          fruitResult.innerHTML = '<span class="bad">请输入要查找的水果名</span>';
+          return;
+        }
+
+        var foundIndex = fruits.indexOf(keyword);
+
+        if (method === "includes") {
+          var included = fruits.includes(keyword);
+          renderFruits(included ? foundIndex : -1);
+          fruitResult.innerHTML = 'includes("' + keyword + '") → <strong class="good">' +
+            included + "</strong>" + (included ? "，该元素存在" : "，未找到该元素");
+          return;
+        }
+
+        if (method === "findIndex") {
+          var predicate = fruits.findIndex(function (item) {
+            return item === keyword;
+          });
+          renderFruits(predicate);
+          fruitResult.innerHTML = "findIndex(fn) → <strong>" + predicate + "</strong>" +
+            (predicate === -1 ? "（未找到）" : "（满足条件的第一个索引）");
+          return;
+        }
+
+        renderFruits(foundIndex);
+        fruitResult.innerHTML = 'indexOf("' + keyword + '") → <strong>' + foundIndex + "</strong>" +
+          (foundIndex === -1 ? "（未找到，返回 -1）" : "（在索引 " + foundIndex + " 处）");
+      }
+
+      document.querySelectorAll("[data-find]").forEach(function (button) {
+        button.addEventListener("click", function () {
+          searchFruit(button.getAttribute("data-find"));
+        });
+      });
+
+      fruitInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+          searchFruit("indexOf");
+        }
+      });
+
+      renderFruits(-1);
+      searchFruit("indexOf");
+
+      /* ---------- 04 forEach 遍历 ---------- */
+      var walkData = ["HTML", "CSS", "JS", "Vue"];
+      var walkTrack = document.getElementById("walkTrack");
+      var walkResult = document.getElementById("walkResult");
+      var walkBtn = document.getElementById("walkBtn");
+      var walkTimers = [];
+      var walking = false;
+
+      function buildWalkTrack() {
+        walkTrack.innerHTML = "";
+        var fragment = document.createDocumentFragment();
+
+        walkData.forEach(function (item, index) {
+          fragment.appendChild(createCell(item, index));
+        });
+
+        walkTrack.appendChild(fragment);
+      }
+
+      function markWalk(index) {
+        Array.prototype.forEach.call(walkTrack.children, function (cell, i) {
+          cell.classList.toggle("is-mark", i === index);
+          cell.classList.toggle("is-visited", i < index);
+        });
+      }
+
+      function startWalk() {
+        if (walking) {
+          return;
+        }
+
+        walkTimers.forEach(function (timer) {
+          clearTimeout(timer);
+        });
+        walkTimers = [];
+
+        walking = true;
+        walkBtn.disabled = true;
+        walkResult.innerHTML = "";
+
+        walkData.forEach(function (item, index) {
+          walkTimers.push(setTimeout(function () {
+            markWalk(index);
+
+            var line = document.createElement("span");
+            line.className = "walk-item";
+            line.textContent = index + " : " + item;
+            walkResult.appendChild(line);
+          }, index * 650));
+        });
+
+        walkTimers.push(setTimeout(function () {
+          markWalk(-1);
+          walking = false;
+          walkBtn.disabled = false;
+        }, walkData.length * 650 + 400));
+      }
+
+      buildWalkTrack();
+      markWalk(-1);
+      walkBtn.addEventListener("click", startWalk);
+
+      /* ---------- 05 join ---------- */
+      var joinData = ["HTML", "CSS", "JavaScript"];
+      var joinTrack = document.getElementById("joinTrack");
+      var joinSelect = document.getElementById("joinSelect");
+      var joinCode = document.getElementById("joinCode");
+      var joinOutput = document.getElementById("joinOutput");
+
+      joinData.forEach(function (item, index) {
+        joinTrack.appendChild(createCell(item, index));
+      });
+
+      function updateJoin() {
+        var separator = joinSelect.value;
+        joinCode.textContent = 'arr.join("' + separator + '")';
+        joinOutput.textContent = joinData.join(separator);
+      }
+
+      joinSelect.addEventListener("change", updateJoin);
+      updateJoin();
+
+      /* ---------- 05 concat ---------- */
+      var concatAValues = [1, 2, 3];
+      var concatBValues = [4, 5];
+
+      function renderMini(target, values, bonusFrom) {
+        target.innerHTML = "";
+        var fragment = document.createDocumentFragment();
+
+        values.forEach(function (value, index) {
+          var extra = bonusFrom !== undefined && index >= bonusFrom ? "is-bonus" : "";
+          fragment.appendChild(createCell(value, index, extra));
+        });
+
+        target.appendChild(fragment);
+      }
+
+      function renderConcat() {
+        renderMini(document.getElementById("concatA"), concatAValues);
+        renderMini(document.getElementById("concatB"), concatBValues);
+        renderMini(document.getElementById("concatResult"), concatAValues.concat(concatBValues), concatAValues.length);
+      }
+
+      document.getElementById("concatBtn").addEventListener("click", renderConcat);
+      renderConcat();
+
+      /* ---------- 05 slice ---------- */
+      var sliceData = [2019, 2020, 2021, 2022, 2023, 2024];
+      var sliceTrack = document.getElementById("sliceTrack");
+      var sliceStart = document.getElementById("sliceStart");
+      var sliceEnd = document.getElementById("sliceEnd");
+      var sliceStartValue = document.getElementById("sliceStartValue");
+      var sliceEndValue = document.getElementById("sliceEndValue");
+      var sliceCode = document.getElementById("sliceCode");
+      var sliceResult = document.getElementById("sliceResult");
+
+      sliceData.forEach(function (value, index) {
+        sliceTrack.appendChild(createCell(value, index));
+      });
+
+      function updateSlice() {
+        var start = Number(sliceStart.value);
+        var end = Number(sliceEnd.value);
+
+        sliceStartValue.textContent = start;
+        sliceEndValue.textContent = end;
+
+        Array.prototype.forEach.call(sliceTrack.children, function (cell, index) {
+          cell.classList.toggle("is-selected", index >= start && index < end);
+        });
+
+        sliceCode.textContent = "arr.slice(" + start + ", " + end + ")";
+        sliceResult.textContent = formatArray(sliceData.slice(start, end));
+      }
+
+      sliceStart.addEventListener("input", updateSlice);
+      sliceEnd.addEventListener("input", updateSlice);
+      updateSlice();
+    })();
+  </script>
+</body>
+</html>

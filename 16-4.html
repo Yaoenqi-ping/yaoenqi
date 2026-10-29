@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="24001010631 药恩祈">
+  <title>文章排行榜</title>
+  <link rel="stylesheet" href="font/iconfont.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 18px 20px 24px;
+      color: #333;
+      background: #fff;
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+    }
+
+    .ranking {
+      width: 100%;
+      max-width: 430px;
+      margin: 0 auto;
+    }
+
+    .ranking-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      height: 31px;
+      border-bottom: 1px solid #d5e5f1;
+    }
+
+    .ranking-tab {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      border: 1px solid transparent;
+      border-bottom: 0;
+      color: #333;
+      background: #dceafb;
+      font: inherit;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .ranking-tab + .ranking-tab {
+      margin-left: 4px;
+    }
+
+    .ranking-tab[aria-selected="true"] {
+      z-index: 1;
+      border-color: #b6d2e6;
+      border-bottom: 1px solid #fff;
+      background: #fff;
+      font-weight: 700;
+    }
+
+    .ranking-list {
+      margin: 13px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .ranking-item {
+      display: grid;
+      grid-template-columns: 25px minmax(0, 1fr) 58px;
+      align-items: center;
+      min-height: 40px;
+      border-bottom: 1px dotted #dedede;
+      column-gap: 2px;
+    }
+
+    .ranking-item:last-child {
+      border-bottom: 0;
+    }
+
+    .rank-number {
+      color: #a4afba;
+      font-size: 14px;
+    }
+
+    .ranking-item:nth-child(-n + 3) .rank-number {
+      color: #83a9c5;
+    }
+
+    .rank-title {
+      overflow: hidden;
+      color: #333;
+      font-size: 15px;
+      line-height: 1.45;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .rank-count {
+      color: #b04f5b;
+      font-size: 14px;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 380px) {
+      body {
+        padding-right: 20px;
+        padding-left: 20px;
+      }
+
+      .ranking-item {
+        grid-template-columns: 24px minmax(0, 1fr) 54px;
+      }
+
+      .rank-title {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="ranking" aria-label="文章排行榜">
+    <div class="ranking-tabs" role="tablist" aria-label="排行榜类型">
+      <button class="ranking-tab" id="click-tab" type="button" role="tab" aria-selected="true" aria-controls="ranking-list">点击排行</button>
+      <button class="ranking-tab" id="comment-tab" type="button" role="tab" aria-selected="false" aria-controls="ranking-list">评论排行</button>
+    </div>
+    <ol class="ranking-list" id="ranking-list" role="tabpanel" aria-labelledby="click-tab" aria-live="polite"></ol>
+  </main>
+
+  <script>
+    (function () {
+      var clickRankings = [
+        { title: "中国各城市房子还要卖多少年 (详细数据)", count: "187706" },
+        { title: "任志强：60多年来 我不知道国企给了我们", count: "171180" },
+        { title: "三精制药董事长总被查因华润南啤案 省食", count: "127631" },
+        { title: "内地17省铺开不动产统一登记职责整合工作", count: "113865" },
+        { title: "山西煤老板抛售整栋99套三手房 8年投资翻", count: "72770" },
+        { title: "北京城南楼市“洼陷” 变相降价措施加码", count: "62971" },
+        { title: "中国3D打印技术取得重大突破 近1200人连", count: "27456" },
+        { title: "重磅利空突至致全球暴跌 A股或黑周五无悬", count: "25322" },
+        { title: "七匹狼早盘上演高范一幕：单笔1手卖单刷", count: "20912" },
+        { title: "长油小股东主导股东大会 当场爆料董事长", count: "11667" }
+      ];
+
+      var commentTitles = [
+        "房价到底什么时候才能回到合理水平？",
+        "这座城市的变化，大家都感受到了吗",
+        "关于最新政策，听听大家怎么说",
+        "普通人现在买房还需要考虑哪些因素",
+        "年轻人选择留在大城市还是回家乡",
+        "楼市回暖了吗？来说说你身边的情况",
+        "今年的就业环境，评论区聊聊真实感受",
+        "这件事你怎么看？欢迎留下你的观点",
+        "一线城市和小城市，生活差距有多大",
+        "如果重新选择，你还会做同样的决定吗"
+      ];
+
+      var list = document.getElementById("ranking-list");
+      var tabs = [
+        document.getElementById("click-tab"),
+        document.getElementById("comment-tab")
+      ];
+
+      function renderRankings(items, activeTab) {
+        list.textContent = "";
+        list.setAttribute("aria-labelledby", activeTab.id);
+
+        items.forEach(function (item, index) {
+          var row = document.createElement("li");
+          row.className = "ranking-item";
+
+          var rank = document.createElement("span");
+          rank.className = "rank-number";
+          rank.textContent = index + 1;
+
+          var title = document.createElement("span");
+          title.className = "rank-title";
+          title.textContent = item.title;
+          title.title = item.title;
+
+          var count = document.createElement("span");
+          count.className = "rank-count";
+          count.textContent = item.count;
+
+          row.appendChild(rank);
+          row.appendChild(title);
+          row.appendChild(count);
+          list.appendChild(row);
+        });
+
+        tabs.forEach(function (tab) {
+          var selected = tab === activeTab;
+          tab.setAttribute("aria-selected", selected ? "true" : "false");
+          tab.tabIndex = selected ? 0 : -1;
+        });
+      }
+
+      function createCommentRankings() {
+        return commentTitles.map(function (title) {
+          return {
+            title: title,
+            count: String(Math.floor(Math.random() * 9800) + 1200)
+          };
+        }).sort(function (first, second) {
+          return Number(second.count) - Number(first.count);
+        });
+      }
+
+      tabs[0].addEventListener("click", function () {
+        renderRankings(clickRankings, tabs[0]);
+      });
+
+      tabs[1].addEventListener("click", function () {
+        renderRankings(createCommentRankings(), tabs[1]);
+      });
+
+      tabs.forEach(function (tab, index) {
+        tab.addEventListener("keydown", function (event) {
+          if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") {
+            return;
+          }
+
+          event.preventDefault();
+          var nextIndex = index === 0 ? 1 : 0;
+          tabs[nextIndex].focus();
+          tabs[nextIndex].click();
+        });
+      });
+
+      renderRankings(clickRankings, tabs[0]);
+    })();
+  </script>
+</body>
+</html>
